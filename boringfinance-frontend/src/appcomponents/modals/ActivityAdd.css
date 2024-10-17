@@ -1,0 +1,17 @@
+.activity_add_container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    bottom: 0;
+    padding: 1rem;
+}
+
+.activity_add_container .add_total_btn {
+    width: 4rem;
+    height: 4rem;
+    box-shadow: 1px 8px 75px 20px rgba(115, 112, 112, 0.57);
+    -webkit-box-shadow: 1px 8px 75px 20px rgba(115, 112, 112, 0.57);
+    -moz-box-shadow: 1px 8px 75px 20px rgba(115, 112, 112, 0.57);
+}

@@ -1,0 +1,6 @@
+.main_method_container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: space-between;
+}

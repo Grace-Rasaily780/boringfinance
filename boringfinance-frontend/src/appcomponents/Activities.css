@@ -1,0 +1,32 @@
+.activities_container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+}
+
+.title {
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+
+.activity_container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.activity_left h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    line-height: 1.2rem;
+}
+
+.activity_left span {
+    font-size: 0.8rem;
+    line-height: 0.8rem;
+    color: #767676;
+}
+
+.activity_right span {
+    font-weight: bold;
+}

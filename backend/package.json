@@ -1,0 +1,25 @@
+{
+  "name": "boringfinanceapp-backend",
+  "version": "1.0.50",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "bun run --watch src/index.ts"
+  },
+  "dependencies": {
+    "@elysiajs/bearer": "^1.1.2",
+    "@elysiajs/cors": "^0.8.0",
+    "@types/bcryptjs": "^2.4.6",
+    "@types/jsonwebtoken": "^9.0.7",
+    "bcryptjs": "^2.4.3",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.4.5",
+    "elysia": "latest",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.2.1",
+    "uuid": "^10.0.0"
+  },
+  "devDependencies": {
+    "bun-types": "latest"
+  },
+  "module": "src/index.js"
+}
