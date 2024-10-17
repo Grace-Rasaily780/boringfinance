@@ -20,7 +20,7 @@ const app = new Elysia()
   .group("/balance", (app) => app.use(balance))
   .group("/method503020", (app) => app.use(method503020))
   .group("/transaction", (app) => app.use(transaction))
-  .listen(3000);
+  .listen(process.env.PORT);
 
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
