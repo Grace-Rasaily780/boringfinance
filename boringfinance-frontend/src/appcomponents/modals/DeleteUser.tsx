@@ -21,12 +21,10 @@ function DeleteUser() {
     null | boolean | string
   >(null);
   const [status, setStatus] = useState("clean");
-  const [success, setSuccess] = useState(false);
 
   function submit() {
     if (status == "error") {
       setPasswordValidate(null);
-      setSuccess(false);
     }
 
     if (password.length == 0) {
@@ -35,8 +33,6 @@ function DeleteUser() {
     }
 
     if (status == "pending" || status == "clean") {
-      setSuccess(true);
-
       deleteUser({ _id: user._id, email: user.email, password });
     }
   }

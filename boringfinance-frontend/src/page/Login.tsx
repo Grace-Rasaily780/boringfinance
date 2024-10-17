@@ -24,13 +24,11 @@ function Login() {
     null | boolean | string
   >(null);
   const [status, setStatus] = useState("clean");
-  const [success, setSuccess] = useState(false);
 
   function submit() {
     if (status == "error") {
       setEmailValidate(null);
       setPasswordValidate(null);
-      setSuccess(false);
     }
 
     if (email.length == 0) {
@@ -42,14 +40,11 @@ function Login() {
     }
 
     if (password.length == 0) {
-      console.log(password.length);
       setPasswordValidate("This field is required");
       setStatus("error");
     }
 
     if (status == "pending" || status == "clean") {
-      setSuccess(true);
-
       login({ email, password });
     }
   }

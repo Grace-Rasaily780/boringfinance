@@ -4,23 +4,23 @@ import { postTransaction } from "@/actions/transaction";
 import { updateGroupApi } from "@/actions/group";
 import useUserStore from "@/store/useUserStore";
 
-export function calibrateChangePercentageAmount(localSettings: any) {
+export function calibrateChangePercentageAmount(localSettings) {
   const { incomeAmount, groups, updateGroup } = useStore.getState();
   const { user } = useUserStore.getState();
 
   const update = localSettings.map((setting, index) => {
     if (groups[index].percentage - localSettings[index].percentage > 0) {
-      let diffPercentage =
+      const diffPercentage =
         groups[index].percentage - localSettings[index].percentage;
-      let diffAmount = incomeAmount * (diffPercentage / 100);
+      const diffAmount = incomeAmount * (diffPercentage / 100);
       return {
         ...setting,
         amount: groups[index].amount - diffAmount,
       };
     } else if (groups[index].percentage - localSettings[index].percentage < 0) {
-      let diffPercentage =
+      const diffPercentage =
         groups[index].percentage - localSettings[index].percentage;
-      let diffAmount = incomeAmount * ((diffPercentage * -1) / 100);
+      const diffAmount = incomeAmount * ((diffPercentage * -1) / 100);
       return {
         ...setting,
         amount: groups[index].amount + diffAmount,

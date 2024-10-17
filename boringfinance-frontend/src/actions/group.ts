@@ -6,15 +6,14 @@ export async function fetchGroups(id: string) {
   try {
     const { data } = await api.get(`/method503020/${id}`);
     updateGroup(data.group);
-  } catch {}
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 export async function updateGroupApi(id: string, updatedGround: Array<object>) {
   try {
-    const { data } = await api.post(
-      `/method503020/updategroup/${id}`,
-      updatedGround,
-    );
+    await api.post(`/method503020/updategroup/${id}`, updatedGround);
   } catch (e) {
     console.log(e);
   }

@@ -30,14 +30,13 @@ import { Trash2 } from "lucide-react";
 function MethodSettings() {
   const [alertStatus, setAlertStatus] = useState(false);
   const methodSettings = useStore((state) => state.groups);
-  const updateGroup = useStore((state) => state.updateGroup);
   const { user } = useUserStore((state) => state);
   const [localSettings, setLocalSettings] = useState([]);
 
   function totalPercentage() {
     let sum = 0;
 
-    localSettings.map((group: any): number => {
+    localSettings.map((group): number => {
       sum += group.percentage;
     });
 

@@ -10,7 +10,9 @@ export async function fetchBalance() {
     const { data } = await api.get(`balance/${user._id}`);
 
     setBalance(data);
-  } catch {}
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 export async function addIncome(income: object) {

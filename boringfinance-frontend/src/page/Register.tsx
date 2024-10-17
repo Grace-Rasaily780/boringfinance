@@ -54,7 +54,6 @@ function Register() {
   );
 
   const [status, setStatus] = useState("clean");
-  const [success, setSuccess] = useState(false);
 
   const [open, setOpen] = useState(false);
   const [value, setValue] = useState("");
@@ -66,7 +65,6 @@ function Register() {
       setEmailValidate(null);
       setCurrencyValidate(null);
       setStatus("pending");
-      setSuccess(false);
     }
 
     if (firstName.length == 0) {
@@ -98,8 +96,6 @@ function Register() {
     }
 
     if (status == "pending" || status == "clean") {
-      setSuccess(true);
-
       register({
         username: firstName + " " + lastName,
         email,

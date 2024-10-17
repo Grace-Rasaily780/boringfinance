@@ -8,7 +8,7 @@ const api = axios.create({
 
 api.interceptors.request.use(
   async (config) => {
-    const { accessToken, refreshAccessToken } = useUserStore.getState();
+    const { accessToken }: { accessToken: string } = useUserStore.getState();
     if (accessToken) {
       config.headers.Authorization = accessToken;
     }

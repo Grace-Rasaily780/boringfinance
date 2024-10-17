@@ -20,7 +20,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import AddCategory from "./AddCategory";
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
 

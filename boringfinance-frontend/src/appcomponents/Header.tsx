@@ -4,7 +4,7 @@ import useUserStore from "@/store/useUserStore";
 import AvatarBtn from "@/appcomponents/AvatarBtn";
 
 function Header() {
-  const { user, logout } = useUserStore((state) => state);
+  const { user } = useUserStore((state) => state);
   return (
     <div className="header">
       <div>

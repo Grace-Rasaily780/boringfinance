@@ -1,30 +1,30 @@
-import { useState } from "react";
+// import { useState } from "react";
 import "./Profile.css";
 import AvatarBtn from "@/appcomponents/AvatarBtn";
 import { Link } from "react-router-dom";
 
-import { CODES, Currencies } from "currencies-map";
-import { Check, ChevronsUpDown } from "lucide-react";
+// import { CODES, Currencies } from "currencies-map";
+// import { Check, ChevronsUpDown } from "lucide-react";
 
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-  CommandList,
-} from "@/components/ui/command";
+// import {
+//   Popover,
+//   PopoverContent,
+//   PopoverTrigger,
+// } from "@/components/ui/popover";
+// import {
+//   Command,
+//   CommandEmpty,
+//   CommandGroup,
+//   CommandInput,
+//   CommandItem,
+//   CommandList,
+// } from "@/components/ui/command";
 
-import { cn } from "@/lib/utils";
-import { Button } from "@/components/ui/button";
+// import { cn } from "@/lib/utils";
+// import { Button } from "@/components/ui/button";
 import {
   Card,
-  CardContent,
+  // CardContent,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -32,10 +32,10 @@ import {
 
 import DeleteUser from "@/appcomponents/modals/DeleteUser";
 // import { updateCurrency } from "@/actions/auth";
-import useUserStore from "@/store/useUserStore";
+// import useUserStore from "@/store/useUserStore";
 
 function Profile() {
-  const { user } = useUserStore((state) => state);
+  // const { user } = useUserStore((state) => state);
   // const currencies = CODES;
 
   // const [open, setOpen] = useState(false);
