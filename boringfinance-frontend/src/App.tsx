@@ -17,7 +17,7 @@ function App() {
     } else if (loggedIn === true) {
       navigate("/");
     }
-  }, [loggedIn, navigate]);
+  }, [loggedIn]);
   return (
     <div>
       <Routes>
