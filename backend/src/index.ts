@@ -15,6 +15,7 @@ mongoose
 
 const app = new Elysia()
   .use(cors())
+  .get("/", () => "Boring Finance")
   .group("/auth", (app) => app.use(auth))
   .group("/user", (app) => app.use(user))
   .group("/balance", (app) => app.use(balance))

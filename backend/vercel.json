@@ -1,16 +1,15 @@
 {
-  "buildCommand": "bun run build",
-  "devCommand": "bun run dev",
+  "version": 2,
   "builds": [
     {
-      "src": "dist/index.js",
+      "src": "src/index.js",
       "use": "@vercel/node"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "dist/index.js"
+      "dest": "src/index.js"
     }
   ]
 }
