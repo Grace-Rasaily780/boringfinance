@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import "./Login.css";
 import { Button } from "@/components/ui/button";
 import {
@@ -63,11 +63,10 @@ function Login() {
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
-                id="email"
                 type="email"
                 placeholder="example@example.com"
                 required
-                onChange={(e) => {
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   setEmail(e.target.value);
                 }}
               />
@@ -80,10 +79,9 @@ function Login() {
                 <Label htmlFor="password">Password</Label>
               </div>
               <Input
-                id="password"
                 type="password"
                 required
-                onChange={(e) => {
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   setPassword(e.target.value);
                 }}
               />

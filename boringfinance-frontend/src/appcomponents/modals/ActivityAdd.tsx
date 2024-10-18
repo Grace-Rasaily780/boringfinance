@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import "./ActivityAdd.css";
@@ -30,7 +30,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import useStore from "@/store";
+import useStore, { transaction } from "@/store";
 import useUserStore from "@/store/useUserStore";
 import { calibrateTransaction } from "@/actions/calibrate";
 
@@ -45,12 +45,12 @@ function ActivityAdd() {
   const [date, setDate] = useState<Date>();
 
   function add() {
-    const localTransaction = {
+    const localTransaction: transaction = {
       amount: amount,
       purpose: purpose,
       group: group,
       // category: category,
-      date: date,
+      date: date ? date : new Date(),
       user_id: user._id,
     };
 
@@ -74,9 +74,8 @@ function ActivityAdd() {
                 Amount
               </Label>
               <Input
-                id="amount"
                 className="col-span-3"
-                onChange={(e) => {
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   setAmount(parseInt(e.target.value));
                 }}
               />
@@ -86,9 +85,8 @@ function ActivityAdd() {
                 Purpose
               </Label>
               <Input
-                id="purpose"
                 className="col-span-3"
-                onChange={(e) => {
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   setPurpose(e.target.value);
                 }}
               />

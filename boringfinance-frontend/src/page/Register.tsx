@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import "./Register.css";
 import { Button } from "@/components/ui/button";
 import {
@@ -120,9 +120,8 @@ function Register() {
               <div className="grid gap-2">
                 <Label htmlFor="first-name">First name</Label>
                 <Input
-                  id="first-name"
                   required
-                  onChange={(e) => {
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     setFirstName(e.target.value);
                   }}
                 />
@@ -133,9 +132,8 @@ function Register() {
               <div className="grid gap-2">
                 <Label htmlFor="last-name">Last name</Label>
                 <Input
-                  id="last-name"
                   required
-                  onChange={(e) => {
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     setLastName(e.target.value);
                   }}
                 />
@@ -147,11 +145,10 @@ function Register() {
             <div className="grid gap-2">
               <Label htmlFor="email">Email</Label>
               <Input
-                id="email"
                 type="email"
                 placeholder="example@example.com"
                 required
-                onChange={(e) => {
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   setEmail(e.target.value);
                 }}
               />
@@ -215,9 +212,8 @@ function Register() {
             <div className="grid gap-2">
               <Label htmlFor="password">Password</Label>
               <Input
-                id="password"
                 type="password"
-                onChange={(e) => {
+                onChange={(e: ChangeEvent<HTMLInputElement>) => {
                   setPassword(e.target.value);
                 }}
               />

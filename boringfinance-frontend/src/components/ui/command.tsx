@@ -5,6 +5,11 @@ import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 
+interface CommandDialogProps
+  extends React.ComponentPropsWithoutRef<typeof Dialog> {
+  children: React.ReactNode;
+}
+
 const Command = React.forwardRef<
   React.ElementRef<typeof CommandPrimitive>,
   React.ComponentPropsWithoutRef<typeof CommandPrimitive>
@@ -22,7 +27,10 @@ Command.displayName = CommandPrimitive.displayName;
 
 // interface CommandDialogProps extends DialogProps {}
 
-const CommandDialog = ({ children, ...props }: CommandDialogProps) => {
+const CommandDialog: React.FC<CommandDialogProps> = ({
+  children,
+  ...props
+}) => {
   return (
     <Dialog {...props}>
       <DialogContent className="overflow-hidden p-0 shadow-lg">

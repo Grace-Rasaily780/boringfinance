@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import "./AddGroup.css";
 import {
@@ -16,7 +16,7 @@ import useStore from "@/store";
 
 function AddCategory() {
   const [label, setLabel] = useState("");
-  const addCategory = useStore((state: object) => state.addCategory);
+  const addCategory = useStore((state) => state.addCategory);
 
   function add() {
     addCategory({
@@ -42,7 +42,7 @@ function AddCategory() {
             <Input
               id="label"
               className="col-span-3"
-              onChange={(e) => {
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setLabel(e.target.value);
               }}
             />

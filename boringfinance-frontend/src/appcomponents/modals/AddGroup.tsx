@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import "./AddGroup.css";
 import {
@@ -12,22 +12,28 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Plus } from "lucide-react";
-import useStore from "@/store";
+import useStore, { group } from "@/store";
 import { v4 as uuidv4 } from "uuid";
 
-function AddGroup({ localSettings, setLocalSettings }) {
+function AddGroup({
+  localSettings,
+  setLocalSettings,
+}: {
+  localSettings: group[];
+  setLocalSettings: any;
+}) {
   const [label, setLabel] = useState("");
   const [percentage, setPercentage] = useState(0);
-  const setMethodSettings = useStore((state: object) => state.addGroup);
-  const incomeAmount = useStore((state: object) => state.incomeAmount);
+  const setMethodSettings = useStore((state) => state.addGroup);
+  const incomeAmount = useStore((state) => state.incomeAmount);
 
   function add() {
-    const newGroup = {
+    const newGroup: group = {
       id: uuidv4(),
       label: label.toUpperCase(),
       amount: incomeAmount * (percentage / 100),
       percentage: percentage,
-      size: "MIN",
+      size: "min",
     };
     setMethodSettings(newGroup);
     setLocalSettings([...localSettings, newGroup]);
@@ -49,9 +55,8 @@ function AddGroup({ localSettings, setLocalSettings }) {
               Label
             </Label>
             <Input
-              id="label"
               className="col-span-3"
-              onChange={(e) => {
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setLabel(e.target.value);
               }}
             />
@@ -61,9 +66,8 @@ function AddGroup({ localSettings, setLocalSettings }) {
               Percentage
             </Label>
             <Input
-              id="percentage"
               className="col-span-3"
-              onChange={(e) => {
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setPercentage(parseInt(e.target.value));
               }}
             />

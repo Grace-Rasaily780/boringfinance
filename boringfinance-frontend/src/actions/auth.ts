@@ -1,4 +1,5 @@
 import api from "@/actions/api";
+import axios, { AxiosError } from "axios";
 import useUserStore from "@/store/useUserStore";
 
 export async function login(info: object) {
@@ -68,20 +69,32 @@ export async function deleteUser(info: object) {
 }
 
 export async function refreshAccessToken() {
-  const { refreshToken, user } = useUserStore.getState();
+  const { refreshToken, user, setToken } = useUserStore.getState();
   try {
     const { data } = await api.post("/auth/refresh-token", {
       user: user._id,
       refreshToken,
     });
+
+    setToken(data.accessToken);
     localStorage.setItem("accessToken", data.accessToken);
-    localStorage.setItem("refreshToken", data.accessToken);
 
     return data;
   } catch (e) {
-    if (e.response.data.error == "jwt expired") {
-      logout();
+    if (axios.isAxiosError(e)) {
+      const axiosError = e as AxiosError;
+      if (
+        axiosError.response?.data &&
+        typeof axiosError.response.data === "object" &&
+        "error" in axiosError.response.data
+      ) {
+        const errorData = axiosError.response.data as { error: string };
+        if (errorData.error === "jwt expired") {
+          logout();
+        }
+      }
     }
+    console.error("Error refreshing token:", e);
   }
 }
 

@@ -1,5 +1,5 @@
 import api from "@/actions/api";
-import useStore from "@/store";
+import useStore, { transaction } from "@/store";
 
 export async function fetchTransactions(id: string) {
   const { setTransactions } = useStore.getState();
@@ -11,7 +11,7 @@ export async function fetchTransactions(id: string) {
   }
 }
 
-export async function postTransaction(transaction: object) {
+export async function postTransaction(transaction: transaction) {
   try {
     await api.post(`/transaction/add`, transaction);
   } catch (e) {

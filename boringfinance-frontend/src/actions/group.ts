@@ -1,5 +1,5 @@
 import api from "@/actions/api";
-import useStore from "@/store";
+import useStore, { group } from "@/store";
 
 export async function fetchGroups(id: string) {
   const { updateGroup } = useStore.getState();
@@ -11,15 +11,15 @@ export async function fetchGroups(id: string) {
   }
 }
 
-export async function updateGroupApi(id: string, updatedGround: Array<object>) {
+export async function updateGroupApi(id: string, updatedGroup: group[]) {
   try {
-    await api.post(`/method503020/updategroup/${id}`, updatedGround);
+    await api.post(`/method503020/updategroup/${id}`, updatedGroup);
   } catch (e) {
     console.log(e);
   }
 }
 
-export async function updateSize(id: string, update: object) {
+export async function updateSize(id: string, update: group) {
   const { groups } = useStore.getState();
 
   const updatedGroups = groups.map((group) => {

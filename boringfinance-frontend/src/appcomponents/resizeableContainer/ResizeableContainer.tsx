@@ -3,9 +3,10 @@ import "./ResizeableContainer.css";
 import { Maximize2, Minimize2 } from "lucide-react";
 import useUserStore from "@/store/useUserStore";
 import { updateSize } from "@/actions/group";
+import { group } from "@/store";
 
-function ResizeableContainer({ info }: { info: object }) {
-  const { label, percentage }: { label: string; percentage: number } = info;
+function ResizeableContainer({ info }: { info: group }) {
+  const { label, percentage } = info;
   const [size, setSize] = useState(info.size);
   const { user } = useUserStore((state) => state);
 

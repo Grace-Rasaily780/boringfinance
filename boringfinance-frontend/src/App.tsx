@@ -10,24 +10,24 @@ import Profile from "@/page/Profile";
 function App() {
   const navigate = useNavigate();
 
-  const { loggedIn } = useUserStore((state: object) => state);
+  const loggedIn = useUserStore((state) => state.loggedIn);
   useEffect(() => {
-    if (loggedIn == false) {
+    if (loggedIn === false) {
       navigate("/login");
-    } else if (loggedIn == true) {
+    } else if (loggedIn === true) {
       navigate("/");
     }
-  }, [loggedIn]);
+  }, [loggedIn, navigate]);
   return (
     <div>
       <Routes>
-        {loggedIn == true ? (
+        {loggedIn === true ? (
           <>
             <Route path="/" Component={Home} />
             <Route path="/profile" Component={Profile} />
           </>
         ) : null}
-        {loggedIn == false ? (
+        {loggedIn === false ? (
           <>
             <Route path="/login" Component={Login} />
             <Route path="/register" Component={Register} />

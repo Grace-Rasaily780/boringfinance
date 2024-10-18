@@ -3,12 +3,13 @@ import { updateCurrentAmount } from "@/actions/balance";
 import { postTransaction } from "@/actions/transaction";
 import { updateGroupApi } from "@/actions/group";
 import useUserStore from "@/store/useUserStore";
+import { group, transaction } from "@/store";
 
-export function calibrateChangePercentageAmount(localSettings) {
+export function calibrateChangePercentageAmount(localSettings: group[]) {
   const { incomeAmount, groups, updateGroup } = useStore.getState();
   const { user } = useUserStore.getState();
 
-  const update = localSettings.map((setting, index) => {
+  const update = localSettings.map((setting: group, index: number) => {
     if (groups[index].percentage - localSettings[index].percentage > 0) {
       const diffPercentage =
         groups[index].percentage - localSettings[index].percentage;
@@ -41,7 +42,7 @@ export function calibratePercentageAmount(incomeAmount: number) {
   const { groups, updateGroup } = useStore.getState();
   const { user } = useUserStore.getState();
 
-  const updatedGroups = groups.map((group) => {
+  const updatedGroups = groups.map((group: group) => {
     return {
       ...group,
       amount: group.amount + incomeAmount * (group.percentage / 100),
@@ -51,11 +52,11 @@ export function calibratePercentageAmount(incomeAmount: number) {
   updateGroupApi(user._id, updatedGroups);
 }
 
-function deductPercentageAmount(localTransaction: object) {
+function deductPercentageAmount(localTransaction: transaction) {
   const { updateGroup, groups } = useStore.getState();
   const { user } = useUserStore.getState();
 
-  const updatedGroups = groups.map((group) => {
+  const updatedGroups = groups.map((group: group) => {
     if (group.label === localTransaction.group) {
       return {
         ...group,
@@ -69,7 +70,7 @@ function deductPercentageAmount(localTransaction: object) {
   updateGroupApi(user._id, updatedGroups);
 }
 
-export function calibrateTransaction(localTransaction: object) {
+export function calibrateTransaction(localTransaction: transaction) {
   const { currentAmount, deductCurrentAmount, addTransaction } =
     useStore.getState();
 

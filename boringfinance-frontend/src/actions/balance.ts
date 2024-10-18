@@ -15,7 +15,12 @@ export async function fetchBalance() {
   }
 }
 
-export async function addIncome(income: object) {
+export async function addIncome(income: {
+  amount: number;
+  user: string;
+  source: string;
+  date: Date;
+}) {
   const { addIncomeAmount, currentAmount } = useStore.getState();
   try {
     await api.post(`/balance/addincome`, income);

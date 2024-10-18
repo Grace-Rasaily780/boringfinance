@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import {
@@ -27,13 +27,13 @@ import { addIncome } from "@/actions/balance";
 
 function AddAmount() {
   const { user } = useUserStore((state) => state);
-  const [date, setDate] = useState<Date>();
+  const [date, setDate] = useState<Date>(new Date());
   const [amount, setAmount] = useState(0);
   const [source, setSource] = useState("");
 
   function add() {
     addIncome({
-      date: date,
+      date: date ? date : new Date(),
       amount: amount,
       source: source,
       user: user._id,
@@ -56,9 +56,8 @@ function AddAmount() {
               Amount
             </Label>
             <Input
-              id="amount"
               className="col-span-3"
-              onChange={(e) => {
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setAmount(parseInt(e.target.value));
               }}
             />
@@ -68,9 +67,8 @@ function AddAmount() {
               Source
             </Label>
             <Input
-              id="source"
               className="col-span-3"
-              onChange={(e) => {
+              onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setSource(e.target.value);
               }}
             />
@@ -96,7 +94,11 @@ function AddAmount() {
                 <Calendar
                   mode="single"
                   selected={date}
-                  onSelect={setDate}
+                  onSelect={(day) => {
+                    if (day) {
+                      setDate(day);
+                    }
+                  }}
                   initialFocus
                 />
               </PopoverContent>

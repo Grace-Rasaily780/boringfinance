@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import { Settings } from "lucide-react";
 import {
   Dialog,
@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import AddGroup from "./AddGroup";
-import useStore from "@/store";
+import useStore, { group } from "@/store";
 import useUserStore from "@/store/useUserStore";
 import { fetchGroups } from "@/actions/group";
 import { calibrateChangePercentageAmount } from "@/actions/calibrate";
@@ -31,12 +31,12 @@ function MethodSettings() {
   const [alertStatus, setAlertStatus] = useState(false);
   const methodSettings = useStore((state) => state.groups);
   const { user } = useUserStore((state) => state);
-  const [localSettings, setLocalSettings] = useState([]);
+  const [localSettings, setLocalSettings] = useState<group[]>([]);
 
   function totalPercentage() {
     let sum = 0;
 
-    localSettings.map((group): number => {
+    localSettings.map((group: group): void => {
       sum += group.percentage;
     });
 
@@ -44,7 +44,7 @@ function MethodSettings() {
   }
 
   function handlePercentageChange(index: number, value: string) {
-    const newSettings = [...localSettings];
+    const newSettings: group[] = [...localSettings];
     newSettings[index] = {
       ...newSettings[index],
       percentage: parseInt(value) || 0,
@@ -52,8 +52,8 @@ function MethodSettings() {
     setLocalSettings(newSettings);
   }
 
-  function handleDeleteGroup(id: number) {
-    const filtered = localSettings.filter((local) => local.id !== id);
+  function handleDeleteGroup(id: string) {
+    const filtered = localSettings.filter((local: group) => local.id !== id);
     setLocalSettings(filtered);
   }
 
@@ -114,7 +114,7 @@ function MethodSettings() {
                   id={group.label}
                   defaultValue={group.percentage}
                   className="col-span-2"
-                  onChange={(e) => {
+                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
                     handlePercentageChange(index, e.target.value);
                   }}
                 />
