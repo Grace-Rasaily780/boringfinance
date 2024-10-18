@@ -1,9 +1,10 @@
 {
   "name": "boringfinanceapp-backend",
-  "version": "1.0.50",
+  "version": "0.0.2",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "bun run --watch src/index.ts"
+    "dev": "bun run --watch src/index.ts",
+    "build": "bun build src/index.ts --target bun --outdir dist",
+    "start": "bun run dist/index.js"
   },
   "dependencies": {
     "@elysiajs/bearer": "^1.1.2",
