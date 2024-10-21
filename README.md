@@ -3,6 +3,8 @@
 
 [![Contributors](https://img.shields.io/github/contributors/Grace-Rasaily780/boringfinance?style=for-the-badge
 )](https://github.com/Grace-Rasaily780/boringfinance/graphs/contributors)
+[![Issues](https://img.shields.io/github/issues/Grace-Rasaily780/boringfinance?style=for-the-badge
+)](https://github.com/Grace-Rasaily780/boringfinance/issues)
 [![Stars](https://img.shields.io/github/stars/Grace-Rasaily780/boringfinance?style=for-the-badge)](https://github.com/Grace-Rasaily780/boringfinance/stargazers)
 [![MIT License](https://img.shields.io/github/license/Grace-Rasaily780/boringfinance?style=for-the-badge)](https://github.com/Grace-Rasaily780/boringfinance/blob/main/LICENSE.txt)
 [![LinkedIn](https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555)](https://www.linkedin.com/in/grace-rasaily-a53263206/)
