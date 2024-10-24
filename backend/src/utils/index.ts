@@ -1,6 +1,7 @@
 import User from "../model/userModel";
 import Method503020 from "../model/503020Model";
 import Transaction from "../model/transactionModel";
+import Balance from "../model/balanceRecordModel";
 import jwt from "jsonwebtoken";
 
 export const addIncome = async (id: string, balance: number) => {
@@ -44,7 +45,7 @@ export const deleteMethod503020 = async (id: string) => {
     user: id,
   });
 
-  return { message: "Method 503020 Eemoved" };
+  return { message: "Method 503020 Removed" };
 };
 
 export const totalPercenatageCalc = (types: Array<any>) => {
@@ -89,5 +90,11 @@ export const verifyToken = (token: string) => {
 export const deleteTransaction = (transactions: any) => {
   transactions.map(async (transaction) => {
     await Transaction.findOneAndDelete(transaction._id);
+  });
+};
+
+export const deleteBalance = (records: any) => {
+  records.map(async (record) => {
+    await Balance.findOneAndDelete(record._id);
   });
 };

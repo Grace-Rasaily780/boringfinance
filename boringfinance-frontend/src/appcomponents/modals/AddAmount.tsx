@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { ChangeEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Plus } from "lucide-react";
 import {
@@ -10,7 +10,6 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
@@ -22,25 +21,50 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import useUserStore from "@/store/useUserStore";
+import useStatusStore from "@/store/useStatusStore";
 import { addIncome } from "@/actions/balance";
 
 function AddAmount() {
   const { user } = useUserStore((state) => state);
-  const [date, setDate] = useState<Date>(new Date());
-  const [amount, setAmount] = useState(0);
-  const [source, setSource] = useState("");
+  const { amountStatus } = useStatusStore((state) => state);
 
-  function add() {
-    addIncome({
-      date: date ? date : new Date(),
-      amount: amount,
-      source: source,
+  const formSchema = z.object({
+    amount: z.number({ message: "Amount is empty" }),
+    source: z.string().min(1, { message: "Source is empty" }),
+    date: z.date({
+      required_error: "Date is required",
+      invalid_type_error: "Date is required",
+    }),
+    user: z.string(),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      amount: 0,
+      source: "",
+      date: new Date(),
       user: user._id,
-    });
+    },
+  });
+
+  function add(values: z.infer<typeof formSchema>) {
+    addIncome(values);
   }
   return (
-    <Dialog>
+    <Dialog open={amountStatus.status == "SUCCESS" ? false : undefined}>
       <DialogTrigger asChild>
         <Button className="rounded-full p-2 add_total_btn">
           <Plus />
@@ -50,71 +74,100 @@ function AddAmount() {
         <DialogHeader>
           <DialogTitle>ADD INCOME</DialogTitle>
         </DialogHeader>
-        <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="amount" className="text-right">
-              Amount
-            </Label>
-            <Input
-              className="col-span-3"
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setAmount(parseInt(e.target.value));
-              }}
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="source" className="text-right">
-              Source
-            </Label>
-            <Input
-              className="col-span-3"
-              onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                setSource(e.target.value);
-              }}
-            />
-          </div>
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="username" className="text-right">
-              Date
-            </Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-[280px] justify-start text-left font-normal",
-                    !date && "text-muted-foreground",
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(add)}>
+            <div className="grid gap-4 py-4">
+              <div className="grid grid-cols-4 items-center gap-4">
+                <FormField
+                  control={form.control}
+                  name="amount"
+                  render={() => (
+                    <FormItem className="col-span-3">
+                      <FormLabel>Amount</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="number"
+                          onChange={(e: ChangeEvent<HTMLInputElement>) => {
+                            form.setValue("amount", parseInt(e.target.value));
+                          }}
+                          required
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
                   )}
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={(day) => {
-                    if (day) {
-                      setDate(day);
-                    }
-                  }}
-                  initialFocus
                 />
-              </PopoverContent>
-            </Popover>
-          </div>
-        </div>
-        <DialogFooter>
-          <Button
-            type="submit"
-            onClick={() => {
-              add();
-            }}
-          >
-            ADD
-          </Button>
-        </DialogFooter>
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <FormField
+                  control={form.control}
+                  name="source"
+                  render={({ field }) => (
+                    <FormItem className="col-span-3">
+                      <FormLabel>Source</FormLabel>
+                      <FormControl>
+                        <Input {...field} required />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid grid-cols-4 items-center gap-4">
+                <FormField
+                  control={form.control}
+                  name="date"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Date</FormLabel>
+                      <FormControl>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-[280px] justify-start text-left font-normal",
+                                !field.value && "text-muted-foreground",
+                              )}
+                            >
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {field.value ? (
+                                format(field.value, "PPP")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={(value) => {
+                                if (value) {
+                                  form.setValue("date", value);
+                                }
+                              }}
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+            </div>
+            <DialogFooter>
+              <Button
+                type="submit"
+                disabled={amountStatus.status == "PENDING" ? true : false}
+              >
+                ADD
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   );

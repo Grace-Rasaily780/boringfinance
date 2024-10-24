@@ -19,13 +19,13 @@ export const auth = new Elysia()
 
     if (!user) {
       set.status = 401;
-      return "Invalid email or password";
+      return { message: "Invalid email or password" };
     }
 
     const valid = bcrypt.compare(user.password, body.password);
     if (!valid) {
       set.status = 401;
-      return "Invalid email or password";
+      return { message: "Invalid email or password" };
     }
 
     const { accessToken, refreshToken } = generateTokens(
@@ -50,7 +50,7 @@ export const auth = new Elysia()
       const existingUser = await User.findOne({ email: body.email });
       if (existingUser) {
         set.status = 400;
-        return { error: "Email already registered" };
+        return { message: "Email already registered" };
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -89,7 +89,7 @@ export const auth = new Elysia()
     } catch (error) {
       console.error(error);
       set.status = 500;
-      return { error: "Internal server error" };
+      return { message: "Internal server error" };
     }
   })
   .post("/refresh-token", async ({ set, body }: { set: any; body: any }) => {

@@ -1,40 +1,42 @@
-import { useEffect } from "react";
 import "./App.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, Navigate } from "react-router-dom";
 import Home from "@/page/Home";
 import Login from "@/page/Login";
 import Register from "@/page/Register";
 import useUserStore from "@/store/useUserStore";
 import Profile from "@/page/Profile";
-import { Analytics } from "@vercel/analytics/react"
+// import { Analytics } from "@vercel/analytics/react"
 
 function App() {
-  const navigate = useNavigate();
-
   const loggedIn = useUserStore((state) => state.loggedIn);
-  useEffect(() => {
-    if (loggedIn === false) {
-      navigate("/login");
-    } else if (loggedIn === true) {
-      navigate("/");
-    }
-  }, [loggedIn]);
   return (
     <div>
-      <Analytics />
+      {/* <Analytics /> */}
       <Routes>
-        {loggedIn === true ? (
-          <>
-            <Route path="/" Component={Home} />
-            <Route path="/profile" Component={Profile} />
-          </>
-        ) : null}
-        {loggedIn === false ? (
-          <>
-            <Route path="/login" Component={Login} />
-            <Route path="/register" Component={Register} />
-          </>
-        ) : null}
+        <Route
+          path="/"
+          element={
+            loggedIn == true ? <Home /> : <Navigate replace to={"/login"} />
+          }
+        />
+        <Route
+          path="profile"
+          element={
+            loggedIn == true ? <Profile /> : <Navigate replace to={"/login"} />
+          }
+        />
+        <Route
+          path="login"
+          element={
+            loggedIn == false ? <Login /> : <Navigate replace to={"/"} />
+          }
+        />
+        <Route
+          path="register"
+          element={
+            loggedIn == false ? <Register /> : <Navigate replace to={"/"} />
+          }
+        />
       </Routes>
     </div>
   );

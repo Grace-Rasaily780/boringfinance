@@ -1,4 +1,3 @@
-import { useState, ChangeEvent } from "react";
 import "./Login.css";
 import { Button } from "@/components/ui/button";
 import {
@@ -8,48 +7,52 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 import { login } from "@/actions/auth";
+import useStatusStore from "@/store/useStatusStore";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const { authStatus } = useStatusStore((store) => store);
 
-  const [emailValidate, setEmailValidate] = useState<null | boolean | string>(
-    null,
-  );
-  const [passwordValidate, setPasswordValidate] = useState<
-    null | boolean | string
-  >(null);
-  const [status, setStatus] = useState("clean");
+  const formSchema = z.object({
+    email: z.string().email(),
+    password: z.string().min(1, { message: "Password field is empty" }),
+  });
 
-  function submit() {
-    if (status == "error") {
-      setEmailValidate(null);
-      setPasswordValidate(null);
-    }
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+  });
 
-    if (email.length == 0) {
-      setEmailValidate("This field is required");
-      setStatus("error");
-    } else if (!email.includes("@") || !email.includes(".com")) {
-      setEmailValidate("Please enter a valid email address");
-      setStatus("error");
-    }
-
-    if (password.length == 0) {
-      setPasswordValidate("This field is required");
-      setStatus("error");
-    }
-
-    if (status == "pending" || status == "clean") {
-      login({ email, password });
-    }
+  function submit(values: z.infer<typeof formSchema>) {
+    login(values);
   }
   return (
     <main className="auth_container">
+      {authStatus.status == "AUTH_ERROR" ? (
+        <Alert variant="destructive" className="mx-auto max-w-sm">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{authStatus.message}</AlertDescription>
+        </Alert>
+      ) : null}
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <img src="/logo.svg" alt="" className="auth_logo" />
@@ -59,46 +62,52 @@ function Login() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4">
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                type="email"
-                placeholder="example@example.com"
-                required
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  setEmail(e.target.value);
-                }}
-              />
-              {emailValidate ? (
-                <Label className="text-red-500">{emailValidate}</Label>
-              ) : null}
-            </div>
-            <div className="grid gap-2">
-              <div className="flex items-center">
-                <Label htmlFor="password">Password</Label>
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(submit)} className="grid gap-4">
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="example@exampe.com"
+                          required
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
               </div>
-              <Input
-                type="password"
-                required
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  setPassword(e.target.value);
-                }}
-              />
-              {passwordValidate ? (
-                <Label className="text-red-500">{passwordValidate}</Label>
-              ) : null}
-            </div>
-            <Button
-              type="submit"
-              className="w-full"
-              onClick={() => {
-                submit();
-              }}
-            >
-              Login
-            </Button>
-          </div>
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input type="password" required {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={authStatus.status == "PENDING" ? true : false}
+              >
+                Login
+              </Button>
+            </form>
+          </Form>
           <div className="mt-4 text-center text-sm">
             Don&apos;t have an account?{" "}
             <Link to="/register" className="underline">

@@ -1,11 +1,18 @@
 import api from "@/actions/api";
 import useStore, { group } from "@/store";
+import useStatusStore from "@/store/useStatusStore";
 
 export async function fetchGroups(id: string) {
   const { updateGroup } = useStore.getState();
+  const { setGroupStatus } = useStatusStore.getState();
   try {
-    const { data } = await api.get(`/method503020/${id}`);
-    updateGroup(data.group);
+    setGroupStatus({ status: "PENDING", message: "API Called" });
+    const { data, status } = await api.get(`/method503020/${id}`);
+
+    if (status == 200) {
+      setGroupStatus({ status: "SUCCESS", message: "Fetch Successfully" });
+      updateGroup(data.group);
+    }
   } catch (e) {
     console.log(e);
   }

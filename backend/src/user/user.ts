@@ -1,8 +1,14 @@
 import { Elysia } from "elysia";
 import bcrypt from "bcryptjs";
 import User from "../model/userModel";
-import { verifyToken, deleteMethod503020, deleteTransaction } from "../utils";
+import {
+  verifyToken,
+  deleteMethod503020,
+  deleteTransaction,
+  deleteBalance,
+} from "../utils";
 import Transaction from "../model/transactionModel";
+import Balance from "../model/balanceRecordModel";
 
 interface apiBody {
   _id: string;
@@ -85,7 +91,6 @@ export const user = new Elysia()
       return "Invalid email or password";
     }
 
-    // Check if password is correct
     const valid = bcrypt.compare(user.password, body.password);
     if (!valid) {
       set.status = 401;
@@ -95,7 +100,9 @@ export const user = new Elysia()
     await User.findByIdAndDelete(user._id);
     await deleteMethod503020(user._id);
     const transactions = await Transaction.find({ user: user._id });
+    const records = await Balance.find({ user: user._id });
     deleteTransaction(transactions);
+    deleteBalance(records);
 
     return { message: "User Deleted" };
   });

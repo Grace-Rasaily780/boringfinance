@@ -33,7 +33,7 @@ function AddGroup({
       label: label.toUpperCase(),
       amount: incomeAmount * (percentage / 100),
       percentage: percentage,
-      size: "min",
+      size: "MIN",
     };
     setMethodSettings(newGroup);
     setLocalSettings([...localSettings, newGroup]);
@@ -56,6 +56,7 @@ function AddGroup({
             </Label>
             <Input
               className="col-span-3"
+              required
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setLabel(e.target.value);
               }}
@@ -67,6 +68,7 @@ function AddGroup({
             </Label>
             <Input
               className="col-span-3"
+              required
               onChange={(e: ChangeEvent<HTMLInputElement>) => {
                 setPercentage(parseInt(e.target.value));
               }}

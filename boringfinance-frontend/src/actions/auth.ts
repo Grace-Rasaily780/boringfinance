@@ -1,41 +1,58 @@
 import api from "@/actions/api";
 import axios, { AxiosError } from "axios";
 import useUserStore from "@/store/useUserStore";
+import useStatusStore from "@/store/useStatusStore";
 
 export async function login(info: object) {
-  const { setUser, setLoggedIn } = useUserStore.getState();
+  const { setUser, setLoggedIn, setBothToken } = useUserStore.getState();
+  const { setAuthStatus } = useStatusStore.getState();
   try {
+    setAuthStatus({ status: "PENDING", message: "API called" });
     const { data, status } = await api.post("/auth/login", info);
     setUser(data.user);
     localStorage.setItem("user", JSON.stringify(data.user));
     if (status == 200) {
+      setAuthStatus({ status: "SUCCESS", message: "Logged In" });
       localStorage.setItem("loggedIn", "true");
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("refreshToken", data.refreshToken);
       setLoggedIn(true);
-      window.location.href = "/";
+      setBothToken(data.accessToken, data.refreshToken);
     }
   } catch (e) {
-    console.log(e);
+    if (axios.isAxiosError(e)) {
+      const axiosError = e as AxiosError;
+
+      const errorData = axiosError.response?.data as { message: string };
+      setAuthStatus({ status: "AUTH_ERROR", message: errorData.message });
+    }
   }
 }
 
 export async function register(info: object) {
-  const { setUser, setLoggedIn } = useUserStore.getState();
+  const { setUser, setLoggedIn, setBothToken } = useUserStore.getState();
+  const { setAuthStatus } = useStatusStore.getState();
   try {
+    setAuthStatus({ status: "PENDING", message: "API called" });
     const { data, status } = await api.post("/auth/register", info);
 
     setUser(data.user);
     localStorage.setItem("user", JSON.stringify(data.user));
     if (status == 200) {
+      setAuthStatus({ status: "SUCCESS", message: "Logged In" });
       localStorage.setItem("loggedIn", "true");
       localStorage.setItem("accessToken", data.accessToken);
       localStorage.setItem("refreshToken", data.accessToken);
       setLoggedIn(true);
-      window.location.href = "/";
+      setBothToken(data.accessToken, data.refreshToken);
     }
   } catch (e) {
-    console.log(e);
+    if (axios.isAxiosError(e)) {
+      const axiosError = e as AxiosError;
+
+      const errorData = axiosError.response?.data as { message: string };
+      setAuthStatus({ status: "AUTH_ERROR", message: errorData.message });
+    }
   }
 }
 
@@ -61,7 +78,6 @@ export async function deleteUser(info: object) {
       localStorage.removeItem("accessToken");
       localStorage.removeItem("refreshToken");
       setLoggedIn(false);
-      window.location.href = "/login";
     }
   } catch (e) {
     console.log(e);

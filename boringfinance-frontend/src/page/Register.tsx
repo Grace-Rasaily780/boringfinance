@@ -1,4 +1,4 @@
-import { useState, ChangeEvent } from "react";
+import { useState } from "react";
 import "./Register.css";
 import { Button } from "@/components/ui/button";
 import {
@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Link } from "react-router-dom";
 import { CODES, Currencies } from "currencies-map";
 import { Check, ChevronsUpDown } from "lucide-react";
@@ -28,84 +27,64 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { AlertCircle } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { register } from "@/actions/auth";
+import useStatusStore from "@/store/useStatusStore";
 
 function Register() {
+  const { authStatus } = useStatusStore((store) => store);
+
+  const formSchema = z.object({
+    firstName: z.string().min(1, { message: "First Name is empty" }),
+    lastName: z.string().min(1, { message: "Second Name is empty" }),
+    email: z.string().email(),
+    password: z.string().min(1, { message: "Password field is empty" }),
+    currency: z.string().min(3, { message: "Select a currency" }),
+  });
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      email: "",
+      password: "",
+      currency: "",
+    },
+  });
   const currencies = CODES;
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const [firstNameValidate, setFirstNameValidate] = useState<null | boolean>(
-    null,
-  );
-  const [lastNameValidate, setLastNameValidate] = useState<null | boolean>(
-    null,
-  );
-  const [emailValidate, setEmailValidate] = useState<null | boolean | string>(
-    null,
-  );
-  const [currencyValidate, setCurrencyValidate] = useState<null | boolean>(
-    null,
-  );
-  const [passwordValidate, setPasswordValidate] = useState<null | boolean>(
-    null,
-  );
-
-  const [status, setStatus] = useState("clean");
 
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState("");
 
-  function submit() {
-    if (status == "error") {
-      setFirstNameValidate(null);
-      setLastNameValidate(null);
-      setEmailValidate(null);
-      setCurrencyValidate(null);
-      setStatus("pending");
-    }
-
-    if (firstName.length == 0) {
-      setFirstNameValidate(false);
-      setStatus("error");
-    }
-
-    if (lastName.length == 0) {
-      setLastNameValidate(false);
-      setStatus("error");
-    }
-
-    if (email.length == 0) {
-      setEmailValidate("This field is required");
-      setStatus("error");
-    } else if (!email.includes("@") || !email.includes(".com")) {
-      setEmailValidate("Please enter a valid email address");
-      setStatus("error");
-    }
-
-    if (value.length == 0) {
-      setCurrencyValidate(false);
-      setStatus("error");
-    }
-
-    if (password.length == 0) {
-      setPasswordValidate(false);
-      setStatus("error");
-    }
-
-    if (status == "pending" || status == "clean") {
-      register({
-        username: firstName + " " + lastName,
-        email,
-        currency: value,
-        password,
-      });
-    }
+  function submit(values: z.infer<typeof formSchema>) {
+    register({
+      username: values.firstName + " " + values.lastName,
+      email: values.email,
+      password: values.password,
+      currency: values.currency,
+    });
   }
   return (
     <main className="auth_container">
+      {authStatus.status == "AUTH_ERROR" ? (
+        <Alert variant="destructive" className="mx-auto max-w-sm">
+          <AlertCircle className="h-4 w-4" />
+          <AlertTitle>Error</AlertTitle>
+          <AlertDescription>{authStatus.message}</AlertDescription>
+        </Alert>
+      ) : null}
       <Card className="mx-auto max-w-sm">
         <CardHeader>
           <img src="/logo.svg" alt="" className="auth_logo" />
@@ -115,122 +94,151 @@ function Register() {
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <div className="grid gap-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="first-name">First name</Label>
-                <Input
-                  required
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    setFirstName(e.target.value);
-                  }}
-                />
-                {firstNameValidate === false ? (
-                  <Label className="text-red-500">This field is required</Label>
-                ) : null}
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(submit)} className="grid gap-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="firstName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>First Name</FormLabel>
+                        <FormControl>
+                          <Input type="text" required {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <FormField
+                    control={form.control}
+                    name="lastName"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Last Name</FormLabel>
+                        <FormControl>
+                          <Input type="text" required {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                </div>
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="last-name">Last name</Label>
-                <Input
-                  required
-                  onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                    setLastName(e.target.value);
-                  }}
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          placeholder="example@example.com"
+                          required
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
                 />
-                {lastNameValidate === false ? (
-                  <Label className="text-red-500">This field is required</Label>
-                ) : null}
               </div>
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                type="email"
-                placeholder="example@example.com"
-                required
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  setEmail(e.target.value);
-                }}
-              />
-              {emailValidate ? (
-                <Label className="text-red-500">{emailValidate}</Label>
-              ) : null}
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="currency">Default Currency</Label>
-              <Popover open={open} onOpenChange={setOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    role="combobox"
-                    aria-expanded={open}
-                    className="w-[240px] justify-between"
-                  >
-                    {value
-                      ? currencies.find((currency) => currency === value)
-                      : "Select Currency Code..."}
-                    <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
-                  <Command>
-                    <CommandInput placeholder="Search framework..." />
-                    <CommandList>
-                      <CommandEmpty>No Currency found.</CommandEmpty>
-                      <CommandGroup>
-                        {currencies.map((currency) => (
-                          <CommandItem
-                            key={currency}
-                            value={currency}
-                            onSelect={(currentValue) => {
-                              setValue(
-                                currentValue === value ? "" : currentValue,
-                              );
-                              setOpen(false);
-                            }}
-                          >
-                            <Check
-                              className={cn(
-                                "mr-2 h-4 w-4",
-                                value === currency
-                                  ? "opacity-100"
-                                  : "opacity-0",
-                              )}
-                            />
-                            {currency}: {Currencies.names.get(currency)}
-                          </CommandItem>
-                        ))}
-                      </CommandGroup>
-                    </CommandList>
-                  </Command>
-                </PopoverContent>
-              </Popover>
-              {currencyValidate === false ? (
-                <Label className="text-red-500">This field is required</Label>
-              ) : null}
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                type="password"
-                onChange={(e: ChangeEvent<HTMLInputElement>) => {
-                  setPassword(e.target.value);
-                }}
-              />
-              {passwordValidate === false ? (
-                <Label className="text-red-500">This field is required</Label>
-              ) : null}
-            </div>
-            <Button
-              type="submit"
-              className="w-full"
-              onClick={() => {
-                submit();
-              }}
-            >
-              Create an account
-            </Button>
-          </div>
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="currency"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Default Currency</FormLabel>
+                      <FormControl>
+                        <Popover open={open} onOpenChange={setOpen}>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant="outline"
+                              role="combobox"
+                              aria-expanded={open}
+                              className="w-[240px] justify-between"
+                            >
+                              {field.value
+                                ? currencies.find(
+                                    (currency) => currency === field.value,
+                                  )
+                                : "Select Currency Code..."}
+                              <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-[200px] p-0">
+                            <Command>
+                              <CommandInput placeholder="Search currency..." />
+                              <CommandList>
+                                <CommandEmpty>No Currency found.</CommandEmpty>
+                                <CommandGroup>
+                                  {currencies.map((currency) => (
+                                    <CommandItem
+                                      key={currency}
+                                      value={currency}
+                                      onSelect={(currentValue) => {
+                                        form.setValue(
+                                          "currency",
+                                          currentValue === field.value
+                                            ? ""
+                                            : currentValue,
+                                        );
+                                        setOpen(false);
+                                      }}
+                                    >
+                                      <Check
+                                        className={cn(
+                                          "mr-2 h-4 w-4",
+                                          field.value === currency
+                                            ? "opacity-100"
+                                            : "opacity-0",
+                                        )}
+                                      />
+                                      {currency}:{" "}
+                                      {Currencies.names.get(currency)}
+                                    </CommandItem>
+                                  ))}
+                                </CommandGroup>
+                              </CommandList>
+                            </Command>
+                          </PopoverContent>
+                        </Popover>
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="password"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Password</FormLabel>
+                      <FormControl>
+                        <Input type="password" required {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <Button
+                type="submit"
+                className="w-full"
+                disabled={authStatus.status == "PENDING" ? true : false}
+              >
+                Create an account
+              </Button>
+            </form>
+          </Form>
           <div className="mt-4 text-center text-sm">
             Already have an account?{" "}
             <Link to="/login" className="underline">
