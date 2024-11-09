@@ -50,7 +50,7 @@ function Activities() {
                       </div>
                     </div>
                     <div className="text-right w-full sm:w-auto">
-                      <p className="text-sm font-medium text-red-600">- {transaction.amount}</p>
+                      <p className="text-sm font-medium text-red-600">- {transaction.amount.toLocaleString()}</p>
                     </div>
                   </div>
                 ))
