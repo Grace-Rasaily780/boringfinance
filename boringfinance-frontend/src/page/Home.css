@@ -1,7 +1,13 @@
 main {
-    padding: 2rem;
-    display: flex;
-    flex-direction: column;
-    gap: 2rem;
-    width: 100%;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  width: 100%;
+}
+
+@media only screen and (max-width: 768px) {
+  main {
+    padding: 1rem;
+  }
 }

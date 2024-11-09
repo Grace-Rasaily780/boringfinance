@@ -10,10 +10,8 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
-
 import { format } from "date-fns";
 import { Calendar as CalendarIcon } from "lucide-react";
-
 import { cn } from "@/lib/utils";
 import { Calendar } from "@/components/ui/calendar";
 import {
@@ -66,7 +64,7 @@ function AddAmount() {
   return (
     <Dialog open={amountStatus.status == "SUCCESS" ? false : undefined}>
       <DialogTrigger asChild>
-        <Button className="rounded-full p-2 add_total_btn">
+        <Button className="rounded-full w-8 h-8 min-[400px]:w-10 min-[400px]:h-10 p-2 add_total_btn">
           <Plus />
         </Button>
       </DialogTrigger>
