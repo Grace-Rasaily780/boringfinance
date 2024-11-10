@@ -43,20 +43,27 @@ function DashboardHeader() {
           </CardHeader>
 
           <CardContent className="pt-4">
-            <div className="text-xl sm:text-2xl font-bold"> {user.currency} {numFormatter(incomeAmount)}</div>
+            <div className="text-xl sm:text-2xl font-bold">
+              {" "}
+              {user.currency} {numFormatter(incomeAmount)}
+            </div>
           </CardContent>
         </Card>
 
         <Card className="overflow-hidden transition-all hover:shadow-lg">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 bg-blue-100 pb-2 dark:bg-blue-900">
-            <CardTitle className="text-md font-medium p-1"> Current Balance</CardTitle>
+            <CardTitle className="text-md font-medium p-1">
+              {" "}
+              Current Balance
+            </CardTitle>
           </CardHeader>
           <CardContent className="pt-4">
-            <div className="text-xl sm:text-2xl font-bold total_amount">{user.currency} {numFormatter(currentAmount)}</div>
-            <p className="text-xs text-blue-600 dark:text-blue-400">Updated just now</p>
+            <div className="text-xl sm:text-2xl font-bold total_amount">
+              {user.currency} {numFormatter(currentAmount)}
+            </div>
+            {/* <p className="text-xs text-blue-600 dark:text-blue-400">Updated just now</p> */}
           </CardContent>
         </Card>
-
       </div>
     </div>
   );
