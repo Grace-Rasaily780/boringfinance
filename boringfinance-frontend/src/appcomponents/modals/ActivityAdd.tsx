@@ -243,7 +243,7 @@ function ActivityAdd() {
               <DialogFooter>
                 <Button
                   type="submit"
-                  disabled={activityPostStatus == "PENDING" ? true : false}
+                  disabled={activityPostStatus.status == "PENDING" ? true : false}
                 >
                   ADD
                 </Button>
