@@ -1,86 +1,84 @@
 .group_container {
-    background-color: #dbdada;
-    display: flex;
-    justify-content: space-between;
-    padding: 1rem 1.4rem;
-    /* width: 100%; */
-    height: 100%;
-    border-radius: 0.3rem;
-    gap: 0.2rem;
+  display: flex;
+  justify-content: space-between;
+  /* width: 100%; */
+  height: 100%;
+  border-radius: 0.3rem;
+  gap: 0.2rem;
 }
 
 .group_container .group_left {
-    display: flex;
-    flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
 .group_container .group_left .group_currency {
-    font-size: 1rem;
-    line-height: 1rem;
-    font-weight: 600;
+  font-size: 1rem;
+  line-height: 1rem;
+  font-weight: 600;
 }
 
 .group_container .group_left .group_amount {
-    font-size: 3rem;
-    line-height: 3rem;
-    font-weight: 600;
+  font-size: 3rem;
+  line-height: 3rem;
+  font-weight: 600;
 }
 
 .group_container .group_right {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2rem;
 }
 
 .group_container .group_right .group_info {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    /* justify-content: flex-end; */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  /* justify-content: flex-end; */
 }
 
 .group_container .group_right .group_percentage {
-    font-size: 0.9rem;
-    line-height: 0.9rem;
-    font-weight: 600;
-    color: #767676;
+  font-size: 0.9rem;
+  line-height: 0.9rem;
+  font-weight: 600;
+  color: #767676;
 }
 
 .group_container .group_right .group_label {
-    font-size: 0.9rem;
-    line-height: 0.9rem;
-    font-weight: 600;
-    color: #767676;
+  font-size: 0.9rem;
+  line-height: 0.9rem;
+  font-weight: 600;
+  color: #767676;
 }
 
 .group_container .group_right .resize {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .group_container .group_right .resize svg {
-    height: 1.3rem;
-    width: 1.3rem;
+  height: 1.3rem;
+  width: 1.3rem;
 }
 
 @media only screen and (max-width: 768px) {
-    .group_container {
-        flex-direction: column;
-        gap: 0.8rem;
-    }
-    .group_container .group_right .group_info {
-        align-items: flex-start;
-    }
+  .group_container {
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .group_container .group_right .group_info {
+    align-items: flex-start;
+  }
 
-    .group_container .group_right {
-        flex-direction: row-reverse;
-        align-items: center;
-        justify-content: space-between;
-    }
+  .group_container .group_right {
+    flex-direction: row-reverse;
+    align-items: center;
+    justify-content: space-between;
+  }
 
-    .group_container .group_left .group_amount {
-        font-size: 2.5rem;
-        line-height: 2.5rem;
-        font-weight: 600;
-    }
+  .group_container .group_left .group_amount {
+    font-size: 2.5rem;
+    line-height: 2.5rem;
+    font-weight: 600;
+  }
 }
