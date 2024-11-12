@@ -69,7 +69,7 @@ function Register() {
   const currencies = CODES;
 
   const [open, setOpen] = useState(false);
-  const [confrimPasswordCheck, setConfirmPasswordCheck] = useState(null);
+  const [confrimPasswordCheck, setConfirmPasswordCheck] = useState<null | string>(null);
 
   function submit(values: z.infer<typeof formSchema>) {
     if(values.password === values.confirmPassword) {
@@ -236,7 +236,7 @@ function Register() {
                     </FormItem>
                   )}
                 />
-              </div>              
+              </div>
               <div className="grid gap-2">
                 <FormField
                   control={form.control}
