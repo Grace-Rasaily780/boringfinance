@@ -4,7 +4,7 @@ export const getExpectedBudget = (
     expectedPercent: number
 ) => {
     const expectedAmount = (total * expectedPercent) / 100;
-    const currentPercentage = (current / expectedAmount) * 100 || 0;
+    const currentPercentage = (current / expectedAmount) * 100;
 
     return { expectedAmount, currentPercentage };
 };

@@ -29,6 +29,7 @@ import { Trash2 } from "lucide-react";
 
 function MethodSettings() {
   const [alertStatus, setAlertStatus] = useState(false);
+  const [dialogBox, setDialogBox] = useState(false);
   const methodSettings = useStore((state) => state.groups);
   const { user } = useUserStore((state) => state);
   const [localSettings, setLocalSettings] = useState<group[]>([]);
@@ -62,6 +63,7 @@ function MethodSettings() {
       setAlertStatus(true);
     } else {
       calibrateChangePercentageAmount(localSettings);
+      setDialogBox(false);
     }
   }
 
@@ -93,7 +95,7 @@ function MethodSettings() {
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-      <Dialog>
+      <Dialog open={dialogBox} onOpenChange={setDialogBox}>
         <DialogTrigger asChild>
           <Settings className="setting_btn" />
         </DialogTrigger>

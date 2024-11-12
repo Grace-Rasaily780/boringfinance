@@ -51,6 +51,7 @@ function Register() {
     lastName: z.string().min(1, { message: "Second Name is empty" }),
     email: z.string().email(),
     password: z.string().min(1, { message: "Password field is empty" }),
+    confirmPassword:  z.string().min(1, { message: "Password field is empty" }),
     currency: z.string().min(3, { message: "Select a currency" }),
   });
 
@@ -61,20 +62,26 @@ function Register() {
       lastName: "",
       email: "",
       password: "",
+      confirmPassword: "",
       currency: "",
     },
   });
   const currencies = CODES;
 
   const [open, setOpen] = useState(false);
+  const [confrimPasswordCheck, setConfirmPasswordCheck] = useState(null);
 
   function submit(values: z.infer<typeof formSchema>) {
+    if(values.password === values.confirmPassword) {
     register({
-      username: values.firstName + " " + values.lastName,
+      username: values.firstName + " "  + values.lastName,
       email: values.email,
       password: values.password,
       currency: values.currency,
     });
+    } else {
+      setConfirmPasswordCheck("Password don't match");
+    }
   }
   return (
     <main className="auth_container">
@@ -226,6 +233,24 @@ function Register() {
                         <Input type="password" required {...field} />
                       </FormControl>
                       <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>              
+              <div className="grid gap-2">
+                <FormField
+                  control={form.control}
+                  name="confirmPassword"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Confirm Password</FormLabel>
+                      <FormControl>
+                        <Input type="password" required {...field} />
+                      </FormControl>
+                      <FormMessage />
+                      {confrimPasswordCheck !== null ? (
+                        <FormMessage>{confrimPasswordCheck}</FormMessage>
+                      ): (null)}
                     </FormItem>
                   )}
                 />

@@ -5,13 +5,13 @@ import Login from "@/page/Login";
 import Register from "@/page/Register";
 import useUserStore from "@/store/useUserStore";
 import Profile from "@/page/Profile";
-// import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from "@vercel/analytics/react"
 
 function App() {
   const loggedIn = useUserStore((state) => state.loggedIn);
   return (
     <div>
-      {/* <Analytics /> */}
+      <Analytics />
       <Routes>
         <Route
           path="/"
