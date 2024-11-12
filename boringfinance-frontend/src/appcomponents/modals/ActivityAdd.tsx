@@ -46,7 +46,7 @@ import useStatusStore from "@/store/useStatusStore";
 import { calibrateTransaction } from "@/actions/calibrate";
 
 function ActivityAdd() {
-  const groups = useStore((state) => state.groups);
+  const { groups, currentAmount } = useStore((state) => state);
   const { activityPostStatus, setActivityPostStatus } = useStatusStore(
     (state) => state,
   );
@@ -87,6 +87,7 @@ function ActivityAdd() {
               setActivityPostStatus({ status: "INIT", message: "Open" });
             }}
             className="rounded-full p-1 add_total_btn"
+            disabled={currentAmount == 0 ? true : false}
           >
             <Plus />
           </Button>
@@ -243,7 +244,9 @@ function ActivityAdd() {
               <DialogFooter>
                 <Button
                   type="submit"
-                  disabled={activityPostStatus.status == "PENDING" ? true : false}
+                  disabled={
+                    activityPostStatus.status == "PENDING" ? true : false
+                  }
                 >
                   ADD
                 </Button>
