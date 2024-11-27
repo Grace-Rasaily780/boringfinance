@@ -1,4 +1,4 @@
-import useStore from "@/store";
+import useStore, { hasId } from "@/store";
 import { updateCurrentAmount } from "@/actions/balance";
 import {
   deleteTransaction,
@@ -8,6 +8,12 @@ import {
 import { updateGroupApi } from "@/actions/group";
 import useUserStore from "@/store/useUserStore";
 import { group, transaction, localTransaction } from "@/store";
+
+function isFullTransaction(
+  trans: transaction | localTransaction,
+): trans is transaction {
+  return "_id" in trans;
+}
 
 export function calibrateChangePercentageAmount(localSettings: group[]) {
   const { incomeAmount, groups, updateGroup } = useStore.getState();
@@ -121,25 +127,31 @@ export function calibrateTransaction(localTransaction: localTransaction) {
 export function updateEditTransaction(localTransaction: transaction) {
   const { transactions, setTransactions } = useStore.getState();
 
-  const updatedTransactions: Array<transaction> = transactions.map(
-    (transaction: transaction) => {
-      if (transaction?._id === localTransaction?._id) {
-        return localTransaction;
-      } else {
-        return transaction;
+  const updatedTransactions: transaction[] = transactions.map(
+    (transaction: transaction | localTransaction) => {
+      if (hasId(transaction) && hasId(localTransaction)) {
+        if (transaction?._id === localTransaction?._id) {
+          return localTransaction;
+        } else {
+          return transaction;
+        }
       }
     },
-  );
+  ) as transaction[];
   setTransactions(updatedTransactions);
 }
 
 export function updateDeleteTransaction(localTransaction: transaction) {
   const { transactions, setTransactions } = useStore.getState();
 
-  const updatedTransactions: Array<transaction | localTransaction> =
-    transactions.filter(
-      (transaction) => transaction._id !== localTransaction._id,
-    );
+  const updatedTransactions: transaction[] = transactions.filter(
+    (transaction: transaction | localTransaction) => {
+      if (hasId(transaction) && hasId(localTransaction)) {
+        return transaction._id !== localTransaction._id;
+      }
+    },
+  ) as transaction[];
+
   setTransactions(updatedTransactions);
 }
 
@@ -157,16 +169,30 @@ export function calibrateCurrentAmount(
 }
 
 export function calibrateEditTransaction(
-  localTransaction: transaction,
-  previousTransaction: transaction,
+  localTransaction: transaction | localTransaction,
+  previousTransaction: transaction | localTransaction,
 ) {
+  if (!isFullTransaction(localTransaction)) {
+    console.warn("Attempting to delete a transaction without an ID");
+    return;
+  }
+  if (!isFullTransaction(previousTransaction)) {
+    console.warn("Attempting to delete a transaction without an ID");
+    return;
+  }
   updatePercentageAmount(localTransaction, previousTransaction);
   updateEditTransaction(localTransaction);
   calibrateCurrentAmount(localTransaction.amount, previousTransaction.amount);
   postEditTransaction(localTransaction);
 }
 
-export function calibrateDeleteTransaction(transaction: transaction) {
+export function calibrateDeleteTransaction(
+  transaction: transaction | localTransaction,
+) {
+  if (!isFullTransaction(transaction)) {
+    console.warn("Attempting to delete a transaction without an ID");
+    return;
+  }
   addPercentageAmount(transaction);
   updateDeleteTransaction(transaction);
   calibrateCurrentAmount(-transaction.amount, 0);

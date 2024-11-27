@@ -29,7 +29,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import useStore, { transaction } from "@/store";
+import useStore, { hasId, localTransaction, transaction } from "@/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -45,7 +45,11 @@ import useUserStore from "@/store/useUserStore";
 import useStatusStore from "@/store/useStatusStore";
 import { calibrateEditTransaction } from "@/actions/calibrate";
 
-function EditActivity({ transaction }: { transaction: transaction }) {
+function EditActivity({
+  transaction,
+}: {
+  transaction: transaction | localTransaction;
+}) {
   const { groups } = useStore((state) => state);
   const { activityEditStatus, setActivityEditStatus } = useStatusStore(
     (state) => state,
@@ -56,7 +60,7 @@ function EditActivity({ transaction }: { transaction: transaction }) {
   );
 
   const formSchema = z.object({
-    _id: z.string(),
+    _id: z.string().optional(),
     amount: z.number({ message: "Amount is empty" }).gte(1),
     purpose: z.string().min(1, { message: "Purpose is empty" }),
     group: z.string({ message: "Group is empty" }),
@@ -70,7 +74,7 @@ function EditActivity({ transaction }: { transaction: transaction }) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      _id: transaction._id,
+      _id: hasId(transaction) ? transaction._id : undefined,
       amount: transaction.amount,
       purpose: transaction.purpose,
       group: transaction.group,

@@ -10,11 +10,15 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { transaction } from "@/store";
+import { localTransaction, transaction } from "@/store";
 import useStatusStore from "@/store/useStatusStore";
 import { Trash2 } from "lucide-react";
 
-export function DeleteActivity({ transaction }: { transaction: transaction }) {
+export function DeleteActivity({
+  transaction,
+}: {
+  transaction: transaction | localTransaction;
+}) {
   const { activityDeleteStatus, setActivityDeleteStatus } = useStatusStore(
     (state) => state,
   );

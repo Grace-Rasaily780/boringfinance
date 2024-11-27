@@ -1,5 +1,11 @@
 import { create } from "zustand";
 
+export function hasId(
+  transaction: transaction | localTransaction,
+): transaction is transaction {
+  return "_id" in transaction;
+}
+
 export interface transaction {
   _id: string;
   amount: number;
