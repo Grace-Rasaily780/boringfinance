@@ -1,12 +1,15 @@
 import { create } from "zustand";
 
 export interface transaction {
+  _id: string;
   amount: number;
   purpose: string;
   group: string;
   date: Date;
   user_id: string;
 }
+
+export type localTransaction = Omit<transaction, "_id">;
 
 export interface group {
   id: string;
@@ -21,14 +24,17 @@ export interface StoreState {
   category: object[];
   incomeAmount: number;
   currentAmount: number;
-  transactions: Array<transaction>;
+  transactions: Array<transaction | localTransaction>;
   addGroup: (group: group) => void;
   updateGroup: (group: group[]) => void;
   addIncomeAmount: (amount: number) => void;
   deductCurrentAmount: (amount: number) => void;
   addCategory: (category: object) => void;
-  addTransaction: (transaction: transaction) => void;
-  setTransactions: (transactions: transaction[]) => void;
+  addTransaction: (transaction: localTransaction | transaction) => void;
+  setTransactions: (
+    transactions: Array<transaction | localTransaction>,
+  ) => void;
+  setCurrentAmount: (amount: number) => void;
   setBalance: (balance: { income: number; balance: number }) => void;
 }
 
@@ -52,12 +58,13 @@ const useStore = create<StoreState>((set) => ({
     })),
   addCategory: (category: object) =>
     set((state: StoreState) => ({ category: [...state.category, category] })),
-  addTransaction: (transaction: transaction) =>
+  addTransaction: (transaction: localTransaction | transaction) =>
     set((state: StoreState) => ({
       transactions: [transaction, ...state.transactions],
     })),
-  setTransactions: (transactions: transaction[]) =>
+  setTransactions: (transactions: Array<transaction | localTransaction>) =>
     set({ transactions: transactions }),
+  setCurrentAmount: (amount: number) => set({ currentAmount: amount }),
   setBalance: (balance: { income: number; balance: number }) =>
     set({ incomeAmount: balance.income, currentAmount: balance.balance }),
 }));

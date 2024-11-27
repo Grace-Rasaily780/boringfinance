@@ -1,6 +1,6 @@
 import { Elysia } from "elysia";
 import Method503020 from "../model/503020Model";
-import { totalPercenatageCalc, verifyToken } from "../utils";
+import { syncMethod503020, totalPercenatageCalc, verifyToken } from "../utils";
 
 export const method503020 = new Elysia()
   .onBeforeHandle(({ headers, set }) => {
@@ -15,7 +15,7 @@ export const method503020 = new Elysia()
   })
   .get("/:id", async ({ params: { id } }: { params: { id: string } }) => {
     let method = await Method503020.findOne({ user: id });
-
+    // let syncGroup = await syncMethod503020(id);
     return method;
   })
   .put(

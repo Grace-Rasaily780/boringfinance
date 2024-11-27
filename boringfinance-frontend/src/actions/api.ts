@@ -21,7 +21,7 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
-
+    // console.log(error);
     if (error.response.status === 500) {
       const newAccessToken = await refreshAccessToken();
       if (newAccessToken) {

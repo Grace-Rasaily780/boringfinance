@@ -1,6 +1,6 @@
 import { ChangeEvent, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import { Pencil } from "lucide-react";
 import "./ActivityAdd.css";
 import {
   Dialog,
@@ -29,7 +29,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import useStore from "@/store";
+import useStore, { transaction } from "@/store";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -43,18 +43,20 @@ import {
 } from "@/components/ui/form";
 import useUserStore from "@/store/useUserStore";
 import useStatusStore from "@/store/useStatusStore";
-import { calibrateTransaction } from "@/actions/calibrate";
+import { calibrateEditTransaction } from "@/actions/calibrate";
 
-function ActivityAdd() {
-  const { groups, currentAmount } = useStore((state) => state);
-  const { activityPostStatus, setActivityPostStatus } = useStatusStore(
+function EditActivity({ transaction }: { transaction: transaction }) {
+  const { groups } = useStore((state) => state);
+  const { activityEditStatus, setActivityEditStatus } = useStatusStore(
     (state) => state,
   );
-  // const categorys = useStore((state: object) => state.category);
   const { user } = useUserStore((state) => state);
-  const [max, setMax] = useState(1);
+  const [max, setMax] = useState(
+    groups.filter((group) => group.label === transaction.group)[0].amount,
+  );
 
   const formSchema = z.object({
+    _id: z.string(),
     amount: z.number({ message: "Amount is empty" }).gte(1),
     purpose: z.string().min(1, { message: "Purpose is empty" }),
     group: z.string({ message: "Group is empty" }),
@@ -68,49 +70,48 @@ function ActivityAdd() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      amount: 1,
-      purpose: "",
-      group: "",
-      date: new Date(),
+      _id: transaction._id,
+      amount: transaction.amount,
+      purpose: transaction.purpose,
+      group: transaction.group,
+      date: new Date(transaction.date),
       user_id: user._id,
     },
   });
 
-  function add(values: z.infer<typeof formSchema>) {
-    calibrateTransaction(values);
+  function edit(values: z.infer<typeof formSchema>) {
+    calibrateEditTransaction(values, transaction);
   }
   return (
-    <div className="activity_add_container">
-      <Dialog open={activityPostStatus.status == "SUCCESS" ? false : undefined}>
+    <div>
+      <Dialog open={activityEditStatus.status == "SUCCESS" ? false : undefined}>
         <DialogTrigger asChild>
-          <Button
+          <Pencil
             onClick={() => {
-              setActivityPostStatus({ status: "INIT", message: "Open" });
+              setActivityEditStatus({ status: "INIT", message: "Open" });
             }}
-            className="rounded-full p-1 add_total_btn"
-            disabled={currentAmount == 0 ? true : false}
-          >
-            <Plus />
-          </Button>
+            className="h-3 w-3 sm:h-4 sm:w-4 text-cyan-600 dark:text-cyan-900"
+          />
         </DialogTrigger>
 
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
-            <DialogTitle>ADD TRANSACTION</DialogTitle>
+            <DialogTitle>EDIT TRANSACTION</DialogTitle>
           </DialogHeader>
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(add)}>
+            <form onSubmit={form.handleSubmit(edit)}>
               <div className="grid gap-4 py-4">
                 <div className="grid grid-cols-4 items-center gap-4">
                   <FormField
                     control={form.control}
                     name="group"
-                    render={() => (
+                    render={({ field }) => (
                       <FormItem>
                         <FormLabel>Group</FormLabel>
                         <FormControl>
                           <Select
                             required
+                            defaultValue={field.value}
                             onValueChange={(value) => {
                               setMax(
                                 groups.filter(
@@ -148,8 +149,8 @@ function ActivityAdd() {
                         <FormLabel>Amount</FormLabel>
                         <FormControl>
                           <Input
-                            type="number"
                             {...field}
+                            type="number"
                             min={1}
                             max={max}
                             onChange={(e: ChangeEvent<HTMLInputElement>) => {
@@ -254,10 +255,10 @@ function ActivityAdd() {
                 <Button
                   type="submit"
                   disabled={
-                    activityPostStatus.status == "PENDING" ? true : false
+                    activityEditStatus.status == "PENDING" ? true : false
                   }
                 >
-                  ADD
+                  EDIT
                 </Button>
               </DialogFooter>
             </form>
@@ -268,4 +269,4 @@ function ActivityAdd() {
   );
 }
 
-export default ActivityAdd;
+export default EditActivity;

@@ -52,8 +52,8 @@
 
 ## About The Project
 
-[![Mobile Screen Shot](assets/mobile_screen_ss.png)](assets/mobile_screen_ss.png)
-[![Laptop Screen Shot](assets/medium_screen_ss.png)](assets/medium_screen_ss.png)
+[![Mobile Screen Shot](assets/mobile_screen.png)](assets/mobile_screen.png)
+[![Laptop Screen Shot](assets/large_screen.png)](assets/large_screen.png)
 
 Boring Finance is a minimalist and modular finance tracking web application designed to simplify budgeting using the 50-30-20 rule. The project aims to provide a clean, intuitive interface for users to manage their finances effectively while offering flexibility for future enhancements.
 

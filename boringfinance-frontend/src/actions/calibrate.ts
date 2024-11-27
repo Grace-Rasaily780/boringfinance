@@ -1,9 +1,13 @@
 import useStore from "@/store";
 import { updateCurrentAmount } from "@/actions/balance";
-import { postTransaction } from "@/actions/transaction";
+import {
+  deleteTransaction,
+  postEditTransaction,
+  postTransaction,
+} from "@/actions/transaction";
 import { updateGroupApi } from "@/actions/group";
 import useUserStore from "@/store/useUserStore";
-import { group, transaction } from "@/store";
+import { group, transaction, localTransaction } from "@/store";
 
 export function calibrateChangePercentageAmount(localSettings: group[]) {
   const { incomeAmount, groups, updateGroup } = useStore.getState();
@@ -52,9 +56,8 @@ export function calibratePercentageAmount(incomeAmount: number) {
   updateGroupApi(user._id, updatedGroups);
 }
 
-function deductPercentageAmount(localTransaction: transaction) {
+function deductPercentageAmount(localTransaction: localTransaction) {
   const { updateGroup, groups } = useStore.getState();
-  const { user } = useUserStore.getState();
 
   const updatedGroups = groups.map((group: group) => {
     if (group.label === localTransaction.group) {
@@ -67,19 +70,105 @@ function deductPercentageAmount(localTransaction: transaction) {
   });
 
   updateGroup(updatedGroups);
-  updateGroupApi(user._id, updatedGroups);
 }
 
-export function calibrateTransaction(localTransaction: transaction) {
-  const { currentAmount, deductCurrentAmount, addTransaction } =
-    useStore.getState();
+function addPercentageAmount(localTransaction: transaction) {
+  const { updateGroup, groups } = useStore.getState();
 
-  addTransaction(localTransaction);
-  deductCurrentAmount(localTransaction?.amount);
+  const updatedGroups = groups.map((group: group) => {
+    if (group.label === localTransaction.group) {
+      return {
+        ...group,
+        amount: localTransaction.amount + group.amount,
+      };
+    }
+    return group;
+  });
+
+  updateGroup(updatedGroups);
+}
+
+function updatePercentageAmount(
+  localTransaction: transaction,
+  previousTransaction: transaction,
+) {
+  const { updateGroup, groups } = useStore.getState();
+  const updatedGroups = groups.map((group: group) => {
+    if (group.label === localTransaction.group) {
+      return {
+        ...group,
+        amount:
+          group.amount + (previousTransaction.amount - localTransaction.amount),
+      };
+    }
+    return group;
+  });
+
+  updateGroup(updatedGroups);
+}
+
+export function calibrateTransaction(localTransaction: localTransaction) {
+  const { deductCurrentAmount, currentAmount } = useStore.getState();
   postTransaction(localTransaction);
   deductPercentageAmount(localTransaction);
   updateCurrentAmount(
     currentAmount - localTransaction?.amount,
     localTransaction.user_id,
   );
+  deductCurrentAmount(localTransaction?.amount);
+}
+
+export function updateEditTransaction(localTransaction: transaction) {
+  const { transactions, setTransactions } = useStore.getState();
+
+  const updatedTransactions: Array<transaction> = transactions.map(
+    (transaction: transaction) => {
+      if (transaction?._id === localTransaction?._id) {
+        return localTransaction;
+      } else {
+        return transaction;
+      }
+    },
+  );
+  setTransactions(updatedTransactions);
+}
+
+export function updateDeleteTransaction(localTransaction: transaction) {
+  const { transactions, setTransactions } = useStore.getState();
+
+  const updatedTransactions: Array<transaction | localTransaction> =
+    transactions.filter(
+      (transaction) => transaction._id !== localTransaction._id,
+    );
+  setTransactions(updatedTransactions);
+}
+
+export function calibrateCurrentAmount(
+  localTransaction: number,
+  previousTransaction: number,
+) {
+  const { setCurrentAmount, currentAmount } = useStore.getState();
+  const { user } = useUserStore.getState();
+  setCurrentAmount(currentAmount + (previousTransaction - localTransaction));
+  updateCurrentAmount(
+    currentAmount + (previousTransaction - localTransaction),
+    user?._id,
+  );
+}
+
+export function calibrateEditTransaction(
+  localTransaction: transaction,
+  previousTransaction: transaction,
+) {
+  updatePercentageAmount(localTransaction, previousTransaction);
+  updateEditTransaction(localTransaction);
+  calibrateCurrentAmount(localTransaction.amount, previousTransaction.amount);
+  postEditTransaction(localTransaction);
+}
+
+export function calibrateDeleteTransaction(transaction: transaction) {
+  addPercentageAmount(transaction);
+  updateDeleteTransaction(transaction);
+  calibrateCurrentAmount(-transaction.amount, 0);
+  deleteTransaction(transaction);
 }

@@ -1,6 +1,6 @@
 import { Elysia } from "elysia";
 import Transaction from "../model/transactionModel";
-import { verifyToken } from "../utils/index";
+import { syncMethod503020, verifyToken } from "../utils/index";
 
 export const transaction = new Elysia()
   .onBeforeHandle(({ headers, set }) => {
@@ -14,6 +14,7 @@ export const transaction = new Elysia()
     }
   })
   .get("/:id", async ({ params: { id } }: { params: { id: string } }) => {
+    await syncMethod503020(id);
     const transactions = await Transaction.find({ user: id });
 
     return transactions;
@@ -28,7 +29,31 @@ export const transaction = new Elysia()
       user: body.user_id,
     });
 
-    let update = transaction.save();
+    let update = await transaction.save();
+    let method = await syncMethod503020(body.user_id);
 
-    return { transaction: update, message: "Transaction Added" };
-  });
+    return { transaction: update, group: method, message: "Transaction Added" };
+  })
+  .post(
+    "/edit/:id",
+    async ({ params: { id }, body }: { params: { id: string }; body: any }) => {
+      const oldTransaction = await Transaction.findById(id);
+      const editedTransaction = await Transaction.findOneAndUpdate(
+        { _id: id },
+        { $set: { ...oldTransaction?._doc!, ...body } },
+        { new: true },
+      );
+      const updatedGroup = await syncMethod503020(oldTransaction?.user);
+      return { editedTransaction, updatedGroup };
+    },
+  )
+  .get(
+    "/delete/:id",
+    async ({ params: { id } }: { params: { id: string } }) => {
+      const deletedTransaction = await Transaction.findOneAndDelete({
+        _id: id,
+      });
+      const updatedGroup = await syncMethod503020(deletedTransaction?.user);
+      return { deletedTransaction, updatedGroup };
+    },
+  );

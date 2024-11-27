@@ -40,6 +40,32 @@ export const initateMethod503020 = async (id: string) => {
   return { message: "Method 503020 Initated" };
 };
 
+export const syncMethod503020 = async (id: string) => {
+  let user = await User.findById(id);
+  let transactions = await Transaction.find({ user: id });
+  let method = await Method503020.findOne({ user: id });
+  let syncGroup = [];
+
+  for (let i = 0; i < method?.group.length; i++) {
+    syncGroup[i] = {
+      ...method?.group[i],
+      amount: user.income * (method.group[i].percentage / 100),
+    };
+    for (let j = 0; j < transactions.length; j++) {
+      if (method?.group[i].label == transactions[j].group) {
+        syncGroup[i].amount = syncGroup[i].amount - transactions[j].amount;
+      }
+    }
+  }
+  await Method503020.findOneAndUpdate(
+    { user: id },
+    { $set: { ...method._doc, group: [...syncGroup] } },
+    { new: true },
+  );
+
+  return syncGroup;
+};
+
 export const deleteMethod503020 = async (id: string) => {
   await Method503020.findOneAndDelete({
     user: id,

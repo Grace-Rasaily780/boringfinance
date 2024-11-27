@@ -9,7 +9,7 @@ import mongoose from "mongoose";
 import "dotenv/config";
 
 mongoose
-  .connect(process.env.DB_URL)
+  .connect(process.env.DB_URL!)
   .then(() => console.log("MongoDB connected"))
   .catch((err) => console.log(err));
 
@@ -21,7 +21,7 @@ const app = new Elysia()
   .group("/balance", (app) => app.use(balance))
   .group("/method503020", (app) => app.use(method503020))
   .group("/transaction", (app) => app.use(transaction))
-  .listen(process.env.PORT);
+  .listen(process.env.PORT!);
 
 console.log(
   `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
