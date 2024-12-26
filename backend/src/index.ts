@@ -1,28 +1,10 @@
-import cors from "@elysiajs/cors";
-import { Elysia } from "elysia";
-import { auth } from "./user/auth";
-import { user } from "./user/user";
-import { balance } from "./balance/index";
-import { method503020 } from "./method503020/index";
-import { transaction } from "./transaction/index";
-import mongoose from "mongoose";
 import "dotenv/config";
+import { connectDatabase } from "./config/database";
+import { setupRoutes } from "./routes";
 
-mongoose
-  .connect(process.env.DB_URL!)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => console.log(err));
-
-const app = new Elysia()
-  .use(cors())
-  .get("/", () => "Boring Finance")
-  .group("/auth", (app) => app.use(auth))
-  .group("/user", (app) => app.use(user))
-  .group("/balance", (app) => app.use(balance))
-  .group("/method503020", (app) => app.use(method503020))
-  .group("/transaction", (app) => app.use(transaction))
-  .listen(process.env.PORT!);
+connectDatabase();
+const app = setupRoutes().listen(process.env.PORT!);
 
 console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
 );
