@@ -7,8 +7,12 @@ import { transaction } from "../transaction/index";
 import { applyCoreMiddleware } from "../config/middleware";
 
 export function setupRoutes(): Elysia {
-  return applyCoreMiddleware(new Elysia())
-    .get("/", () => "Boring Finance")
+  const app = applyCoreMiddleware(new Elysia()).get(
+    "/",
+    () => "Boring Finance"
+  );
+
+  return app
     .group("/auth", (app) => app.use(auth))
     .group("/user", (app) => app.use(user))
     .group("/balance", (app) => app.use(balance))

@@ -5,6 +5,11 @@ import { setupRoutes } from "./routes";
 connectDatabase();
 const app = setupRoutes().listen(process.env.PORT!);
 
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-);
+// Safely log server information
+if (app && app.server) {
+  console.log(
+    `🦊 Elysia is running at ${app.server.hostname}:${app.server.port}`
+  );
+} else {
+  console.error("Failed to start Elysia server");
+}
