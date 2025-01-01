@@ -1,11 +1,11 @@
 import { create } from "zustand";
 
 export interface UserStoreState {
-  user: any;
+  user: object;
   accessToken: string | null;
   refreshToken: string | null;
   loggedIn: boolean;
-  setUser: (user: any) => void;
+  setUser: (user: object) => void;
   setLoggedIn: (status: boolean) => void;
   setBothToken: (accessToken: string, refreshToken: string) => void;
   setToken: (token: string) => void;

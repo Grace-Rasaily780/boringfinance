@@ -42,6 +42,7 @@ import { AlertCircle } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { register } from "@/actions/auth";
 import useStatusStore from "@/store/useStatusStore";
+import { PasswordInput } from "@/components/password-input";
 
 function Register() {
   const { authStatus } = useStatusStore((store) => store);
@@ -51,7 +52,7 @@ function Register() {
     lastName: z.string().min(1, { message: "Second Name is empty" }),
     email: z.string().email(),
     password: z.string().min(1, { message: "Password field is empty" }),
-    confirmPassword:  z.string().min(1, { message: "Password field is empty" }),
+    confirmPassword: z.string().min(1, { message: "Password field is empty" }),
     currency: z.string().min(3, { message: "Select a currency" }),
   });
 
@@ -69,16 +70,18 @@ function Register() {
   const currencies = CODES;
 
   const [open, setOpen] = useState(false);
-  const [confrimPasswordCheck, setConfirmPasswordCheck] = useState<null | string>(null);
+  const [confrimPasswordCheck, setConfirmPasswordCheck] = useState<
+    null | string
+  >(null);
 
   function submit(values: z.infer<typeof formSchema>) {
-    if(values.password === values.confirmPassword) {
-    register({
-      username: values.firstName + " "  + values.lastName,
-      email: values.email,
-      password: values.password,
-      currency: values.currency,
-    });
+    if (values.password === values.confirmPassword) {
+      register({
+        username: values.firstName + " " + values.lastName,
+        email: values.email,
+        password: values.password,
+        currency: values.currency,
+      });
     } else {
       setConfirmPasswordCheck("Password don't match");
     }
@@ -173,7 +176,7 @@ function Register() {
                             >
                               {field.value
                                 ? currencies.find(
-                                    (currency) => currency === field.value,
+                                    (currency) => currency === field.value
                                   )
                                 : "Select Currency Code..."}
                               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
@@ -194,7 +197,7 @@ function Register() {
                                           "currency",
                                           currentValue === field.value
                                             ? ""
-                                            : currentValue,
+                                            : currentValue
                                         );
                                         setOpen(false);
                                       }}
@@ -204,7 +207,7 @@ function Register() {
                                           "mr-2 h-4 w-4",
                                           field.value === currency
                                             ? "opacity-100"
-                                            : "opacity-0",
+                                            : "opacity-0"
                                         )}
                                       />
                                       {currency}:{" "}
@@ -230,7 +233,7 @@ function Register() {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input type="password" required {...field} />
+                        <PasswordInput required {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -245,12 +248,12 @@ function Register() {
                     <FormItem>
                       <FormLabel>Confirm Password</FormLabel>
                       <FormControl>
-                        <Input type="password" required {...field} />
+                        <PasswordInput required {...field} />
                       </FormControl>
                       <FormMessage />
                       {confrimPasswordCheck !== null ? (
                         <FormMessage>{confrimPasswordCheck}</FormMessage>
-                      ): (null)}
+                      ) : null}
                     </FormItem>
                   )}
                 />

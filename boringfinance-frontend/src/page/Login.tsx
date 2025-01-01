@@ -24,7 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { login } from "@/actions/auth";
 import useStatusStore from "@/store/useStatusStore";
-import { PasswordInput } from "@/components/ui/custom";
+import { PasswordInput } from "@/components/password-input";
 
 function Login() {
   const { authStatus } = useStatusStore((store) => store);
