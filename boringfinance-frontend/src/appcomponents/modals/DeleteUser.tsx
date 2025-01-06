@@ -33,7 +33,7 @@ function DeleteUser() {
     }
 
     if (status == "pending" || status == "clean") {
-      deleteUser({ _id: user._id, email: user.email, password });
+      deleteUser({ _id: user?._id, email: user?.email, password });
     }
   }
   return (

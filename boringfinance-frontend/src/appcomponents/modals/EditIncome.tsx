@@ -63,7 +63,7 @@ function EditIncome({ record }: { record: Record }) {
       amount: record.amount,
       source: record.source,
       date: new Date(record.date),
-      user: user._id,
+      user: user?._id,
     },
   });
 

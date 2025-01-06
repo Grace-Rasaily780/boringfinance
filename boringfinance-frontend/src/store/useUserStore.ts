@@ -1,11 +1,18 @@
 import { create } from "zustand";
 
+export interface UserState {
+  _id: string;
+  username: string;
+  email: string;
+  currency: string;
+}
+
 export interface UserStoreState {
-  user: object;
+  user: any;
   accessToken: string | null;
   refreshToken: string | null;
   loggedIn: boolean;
-  setUser: (user: object) => void;
+  setUser: (user: any) => void;
   setLoggedIn: (status: boolean) => void;
   setBothToken: (accessToken: string, refreshToken: string) => void;
   setToken: (token: string) => void;
@@ -17,7 +24,7 @@ const useUserStore = create<UserStoreState>((set) => ({
   accessToken: localStorage.getItem("accessToken") || null,
   refreshToken: localStorage.getItem("refreshToken") || null,
   loggedIn: Boolean(localStorage.getItem("loggedIn")) || false,
-  setUser: (user: object) => set({ user: user }),
+  setUser: (user: any) => set({ user: user }),
   setLoggedIn: (status: boolean) => set({ loggedIn: status }),
   setBothToken: (accessToken: string, refreshToken: string) =>
     set({ accessToken: accessToken, refreshToken: refreshToken }),

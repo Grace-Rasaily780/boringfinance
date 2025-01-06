@@ -79,7 +79,7 @@ function EditActivity({
       purpose: transaction.purpose,
       group: transaction.group,
       date: new Date(transaction.date),
-      user_id: user._id,
+      user_id: user?._id,
     },
   });
 

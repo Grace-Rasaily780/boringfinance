@@ -68,8 +68,8 @@ function MethodSettings() {
   }
 
   useEffect(() => {
-    fetchGroups(user._id);
-  }, [user._id]);
+    fetchGroups(user?._id);
+  }, [user?._id]);
 
   useEffect(() => {
     setLocalSettings(methodSettings);

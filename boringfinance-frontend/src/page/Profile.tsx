@@ -1,8 +1,5 @@
 // import { useState } from "react";
 import "./Profile.css";
-import AvatarBtn from "@/appcomponents/AvatarBtn";
-import { Link } from "react-router-dom";
-
 // import { CODES, Currencies } from "currencies-map";
 // import { Check, ChevronsUpDown } from "lucide-react";
 

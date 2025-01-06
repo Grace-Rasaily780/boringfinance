@@ -16,7 +16,7 @@ function Header() {
       <div className="avatar_container">
         <div className="currency_container">
           <span>CURRENCY:</span>
-          <span>{Currencies.symbols.get(user.currency)}</span>
+          <span>{Currencies.symbols.get(user?.currency)}</span>
         </div>
         <AvatarBtn />
       </div>

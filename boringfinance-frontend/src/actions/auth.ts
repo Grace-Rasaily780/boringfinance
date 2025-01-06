@@ -87,15 +87,17 @@ export async function deleteUser(info: object) {
 export async function refreshAccessToken() {
   const { refreshToken, user, setToken } = useUserStore.getState();
   try {
-    const { data } = await api.post("/auth/refresh-token", {
-      user: user._id,
-      refreshToken,
-    });
+    if (user !== null) {
+      const { data } = await api.post("/auth/refresh-token", {
+        user: user?._id,
+        refreshToken,
+      });
 
-    setToken(data.accessToken);
-    localStorage.setItem("accessToken", data.accessToken);
+      setToken(data.accessToken);
+      localStorage.setItem("accessToken", data.accessToken);
 
-    return data;
+      return data;
+    }
   } catch (e) {
     if (axios.isAxiosError(e)) {
       const axiosError = e as AxiosError;
@@ -117,10 +119,14 @@ export async function refreshAccessToken() {
 export async function updateCurrency(currency: string) {
   const { user, setUser } = useUserStore.getState();
   try {
-    const { data } = await api.post(`/user/currency/${user._id}`, { currency });
+    if (user !== null) {
+      const { data } = await api.post(`/user/currency/${user?._id}`, {
+        currency,
+      });
 
-    setUser(data);
-    localStorage.setItem("user", JSON.stringify(data));
+      setUser(data);
+      localStorage.setItem("user", JSON.stringify(data));
+    }
   } catch (e) {
     console.log(e);
   }

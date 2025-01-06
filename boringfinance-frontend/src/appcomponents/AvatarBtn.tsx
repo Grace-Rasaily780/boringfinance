@@ -20,7 +20,7 @@ function AvatarBtn() {
         <Button variant="secondary" size="icon" className="rounded-full">
           <Avatar>
             <AvatarImage
-              src={`https://ui-avatars.com/api/?name=${user.username.split(" ")[0]}+${user.username.split(" ")[1]}&background=000&color=fff`}
+              src={`https://ui-avatars.com/api/?name=${user?.username.split(" ")[0]}+${user?.username.split(" ")[1]}&background=000&color=fff`}
             />
           </Avatar>
           {/* <CircleUser className="h-5 w-5" /> */}

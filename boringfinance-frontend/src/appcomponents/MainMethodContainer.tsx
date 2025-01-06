@@ -14,8 +14,8 @@ function MainMethodContainer() {
   const { user } = useUserStore((state) => state);
 
   useEffect(() => {
-    fetchGroups(user._id);
-  }, [user._id]);
+    fetchGroups(user?._id);
+  }, [user?._id]);
   return (
     <div className="main_method_container">
       {groupStatus.status == "PENDING" ? (

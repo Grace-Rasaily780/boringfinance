@@ -45,7 +45,7 @@ function DashboardHeader() {
           <CardContent className="pt-4">
             <div className="text-xl sm:text-2xl font-bold">
               {" "}
-              {user.currency} {numFormatter(incomeAmount)}
+              {user?.currency} {numFormatter(incomeAmount)}
             </div>
           </CardContent>
         </Card>
@@ -59,7 +59,7 @@ function DashboardHeader() {
           </CardHeader>
           <CardContent className="pt-4">
             <div className="text-xl sm:text-2xl font-bold total_amount">
-              {user.currency} {numFormatter(currentAmount)}
+              {user?.currency} {numFormatter(currentAmount)}
             </div>
             {/* <p className="text-xs text-blue-600 dark:text-blue-400">Updated just now</p> */}
           </CardContent>

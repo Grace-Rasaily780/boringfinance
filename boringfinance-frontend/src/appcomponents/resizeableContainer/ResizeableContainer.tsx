@@ -24,7 +24,7 @@ function ResizeableContainer({ info }: { info: group }) {
 
   function resize(localSize: string) {
     setSize(localSize);
-    updateSize(user._id, { ...info, size: localSize });
+    updateSize(user?._id, { ...info, size: localSize });
   }
 
   const { expectedAmount, currentPercentage } = useMemo(() => {
@@ -83,10 +83,10 @@ function ResizeableContainer({ info }: { info: group }) {
         </CardHeader>
         <CardContent className="pt-4">
           <div className="text-xl sm:text-2xl font-bold">
-            {user.currency} {numFormatter(info.amount)}
+            {user?.currency} {numFormatter(info.amount)}
           </div>
           <p className="mt-2 text-xs sm:text-sm text-gray-600 break-words ">
-            {user.currency} {info.amount} of {user.currency} {expectedAmount}{" "}
+            {user?.currency} {info.amount} of {user?.currency} {expectedAmount}{" "}
             left ( {currentPercentage}% ){" "}
           </p>
         </CardContent>

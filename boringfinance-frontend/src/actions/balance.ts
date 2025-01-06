@@ -9,9 +9,11 @@ export async function fetchBalance() {
   const { setBalance } = useStore.getState();
   const { user } = useUserStore.getState();
   try {
-    const { data } = await api.get(`balance/${user._id}`);
+    if (user !== null) {
+      const { data } = await api.get(`balance/${user?._id}`);
 
-    setBalance(data);
+      setBalance(data);
+    }
   } catch (e) {
     console.log(e);
   }

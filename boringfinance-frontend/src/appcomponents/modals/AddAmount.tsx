@@ -54,7 +54,7 @@ function AddAmount() {
       amount: 0,
       source: "",
       date: new Date(),
-      user: user._id,
+      user: user?._id,
     },
   });
 
