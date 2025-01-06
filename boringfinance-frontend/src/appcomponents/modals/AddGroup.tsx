@@ -20,7 +20,7 @@ function AddGroup({
   setLocalSettings,
 }: {
   localSettings: group[];
-  setLocalSettings: any;
+  setLocalSettings: React.Dispatch<React.SetStateAction<group[]>>;
 }) {
   const [label, setLabel] = useState("");
   const [percentage, setPercentage] = useState(0);

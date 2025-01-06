@@ -24,6 +24,7 @@ import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
 import { login } from "@/actions/auth";
 import useStatusStore from "@/store/useStatusStore";
+import { PasswordInput } from "@/components/password-input";
 
 function Login() {
   const { authStatus } = useStatusStore((store) => store);
@@ -92,7 +93,7 @@ function Login() {
                     <FormItem>
                       <FormLabel>Password</FormLabel>
                       <FormControl>
-                        <Input type="password" required {...field} />
+                        <PasswordInput required {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

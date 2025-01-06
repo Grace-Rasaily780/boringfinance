@@ -19,7 +19,7 @@ function Activities() {
 
   useEffect(() => {
     fetchTransactions(user._id);
-  }, []);
+  }, [user._id]);
 
   return (
     <div className="activities_container">
