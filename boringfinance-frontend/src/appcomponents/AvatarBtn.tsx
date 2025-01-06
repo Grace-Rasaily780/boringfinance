@@ -33,6 +33,9 @@ function AvatarBtn() {
         <Link to="/profile">
           <DropdownMenuItem>Settings</DropdownMenuItem>
         </Link>
+        <Link to="/income">
+          <DropdownMenuItem>Income History</DropdownMenuItem>
+        </Link>
         <DropdownMenuItem
           onClick={() => {
             logout();

@@ -31,6 +31,7 @@ import {
 } from "@/components/ui/card";
 
 import DeleteUser from "@/appcomponents/modals/DeleteUser";
+import Header from "@/appcomponents/Header";
 // import { updateCurrency } from "@/actions/auth";
 // import useUserStore from "@/store/useUserStore";
 
@@ -45,24 +46,13 @@ function Profile() {
   //   updateCurrency(value);
   // }
   return (
-    <div className="flex min-h-screen w-full flex-col">
-      <header className="sticky top-0 flex h-16 items-center gap-4 border-b bg-background px-4 md:px-6">
-        <nav className="hidden flex-col gap-6 text-lg font-medium md:flex md:flex-row md:items-center md:gap-5 md:text-sm lg:gap-6">
-          <Link to="/">
-            <div className="flex items-center gap-2">
-              <img src="/logo.svg" alt="" className="profile_logo" />
-            </div>
-          </Link>
-        </nav>
-        <div className="flex w-11 items-center gap-4 md:ml-auto md:gap-2 lg:gap-4">
-          <AvatarBtn />
-        </div>
-      </header>
+    <div className="profile_page_container">
+      <Header />
       <main className="flex min-h-[calc(100vh_-_theme(spacing.16))] flex-1 flex-col gap-4 bg-muted/40 p-4 md:gap-8 md:p-10">
-        <div className="mx-auto grid w-full max-w-6xl gap-2">
+        <div className="mx-auto grid w-full gap-2">
           <h1 className="text-3xl font-semibold">Settings</h1>
         </div>
-        <div className="mx-auto grid w-full max-w-6xl items-start gap-6 md:grid-cols-1 lg:grid-cols-1">
+        <div className="mx-auto grid w-full items-start gap-6 md:grid-cols-1 lg:grid-cols-1">
           <div className="grid gap-6">
             {/* <Card x-chunk="dashboard-04-chunk-1">
               <CardHeader>

@@ -41,6 +41,7 @@ export interface StoreState {
     transactions: Array<transaction | localTransaction>,
   ) => void;
   setCurrentAmount: (amount: number) => void;
+  setIncomeAmount: (amount: number) => void;
   setBalance: (balance: { income: number; balance: number }) => void;
 }
 
@@ -71,6 +72,7 @@ const useStore = create<StoreState>((set) => ({
   setTransactions: (transactions: Array<transaction | localTransaction>) =>
     set({ transactions: transactions }),
   setCurrentAmount: (amount: number) => set({ currentAmount: amount }),
+  setIncomeAmount: (amount: number) => set({ incomeAmount: amount }),
   setBalance: (balance: { income: number; balance: number }) =>
     set({ incomeAmount: balance.income, currentAmount: balance.balance }),
 }));

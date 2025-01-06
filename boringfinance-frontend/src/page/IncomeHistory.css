@@ -1,0 +1,9 @@
+.profile_logo {
+    height: 2.5rem;
+}
+
+.income_page_container {
+    padding: 2rem;
+    gap: 2rem;
+    width: 100%;
+}

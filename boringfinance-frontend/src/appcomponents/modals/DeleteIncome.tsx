@@ -1,4 +1,4 @@
-import { calibrateDeleteTransaction } from "@/actions/calibrate/calibrateTransaction";
+import { calibrateDeleteIncome } from "@/actions/calibrate/calibrateBalance";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -10,20 +10,16 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { localTransaction, transaction } from "@/store";
+import { Record } from "@/store/useIncomeStore";
 import useStatusStore from "@/store/useStatusStore";
 import { Trash2 } from "lucide-react";
 
-export function DeleteActivity({
-  transaction,
-}: {
-  transaction: transaction | localTransaction;
-}) {
+export function DeleteIncome({ record }: { record: Record }) {
   const { activityDeleteStatus, setActivityDeleteStatus } = useStatusStore(
     (state) => state,
   );
   function del() {
-    calibrateDeleteTransaction(transaction);
+    calibrateDeleteIncome(record);
   }
   return (
     <AlertDialog

@@ -5,7 +5,8 @@ import Login from "@/page/Login";
 import Register from "@/page/Register";
 import useUserStore from "@/store/useUserStore";
 import Profile from "@/page/Profile";
-import { Analytics } from "@vercel/analytics/react"
+import { Analytics } from "@vercel/analytics/react";
+import IncomeHistory from "./page/IncomeHistory";
 
 function App() {
   const loggedIn = useUserStore((state) => state.loggedIn);
@@ -23,6 +24,16 @@ function App() {
           path="profile"
           element={
             loggedIn == true ? <Profile /> : <Navigate replace to={"/login"} />
+          }
+        />
+        <Route
+          path="income"
+          element={
+            loggedIn == true ? (
+              <IncomeHistory />
+            ) : (
+              <Navigate replace to={"/login"} />
+            )
           }
         />
         <Route

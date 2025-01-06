@@ -43,7 +43,7 @@ import {
 } from "@/components/ui/form";
 import useUserStore from "@/store/useUserStore";
 import useStatusStore from "@/store/useStatusStore";
-import { calibrateEditTransaction } from "@/actions/calibrate";
+import { calibrateEditTransaction } from "@/actions/calibrate/calibrateTransaction";
 
 function EditActivity({
   transaction,

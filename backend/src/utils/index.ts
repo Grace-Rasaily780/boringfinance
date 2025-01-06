@@ -49,7 +49,7 @@ export const syncMethod503020 = async (id: string) => {
   for (let i = 0; i < method?.group.length; i++) {
     syncGroup[i] = {
       ...method?.group[i],
-      amount: user.income * (method.group[i].percentage / 100),
+      amount: user?.balance * (method.group[i].percentage / 100),
     };
     for (let j = 0; j < transactions.length; j++) {
       if (method?.group[i].label == transactions[j].group) {
@@ -59,7 +59,7 @@ export const syncMethod503020 = async (id: string) => {
   }
   await Method503020.findOneAndUpdate(
     { user: id },
-    { $set: { ...method._doc, group: [...syncGroup] } },
+    { $set: { ...method?._doc, group: [...syncGroup] } },
     { new: true },
   );
 

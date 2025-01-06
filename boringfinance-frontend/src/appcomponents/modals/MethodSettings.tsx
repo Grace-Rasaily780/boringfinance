@@ -24,7 +24,7 @@ import AddGroup from "./AddGroup";
 import useStore, { group } from "@/store";
 import useUserStore from "@/store/useUserStore";
 import { fetchGroups } from "@/actions/group";
-import { calibrateChangePercentageAmount } from "@/actions/calibrate";
+import { calibrateChangePercentageAmount } from "@/actions/calibrate/calibrate";
 import { Trash2 } from "lucide-react";
 
 function MethodSettings() {

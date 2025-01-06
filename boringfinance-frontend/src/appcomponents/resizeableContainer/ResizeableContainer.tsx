@@ -13,7 +13,7 @@ function ResizeableContainer({ info }: { info: group }) {
   const [size, setSize] = useState(info.size);
   const { user } = useUserStore((state) => state);
 
-  const { incomeAmount: total } = useStore((state) => state);
+  const { currentAmount: total } = useStore((state) => state);
 
   function numFormatter(num: number) {
     return Intl.NumberFormat("en-US", {
@@ -28,9 +28,13 @@ function ResizeableContainer({ info }: { info: group }) {
   }
 
   const { expectedAmount, currentPercentage } = useMemo(() => {
-    const { expectedAmount, currentPercentage } = getExpectedBudget(total, info.amount, info.percentage);
-    return { expectedAmount, currentPercentage }
-  }, [info.amount, info.percentage, total])
+    const { expectedAmount, currentPercentage } = getExpectedBudget(
+      total,
+      info.amount,
+      info.percentage,
+    );
+    return { expectedAmount, currentPercentage };
+  }, [info.amount, info.percentage, total]);
 
   return (
     <div
@@ -40,16 +44,21 @@ function ResizeableContainer({ info }: { info: group }) {
       }}
     >
       <Card className="overflow-hidden w-full transition-all hover:shadow-lg">
-        <CardHeader className={cn("flex flex-row  dark:bg-blue-900 justify-between",
-          label === "NEEDS" ?
-            "bg-blue-100" :
-            label === "WANTS" ?
-              "bg-red-100" :
-              label === "SAVING" ?
-                "bg-green-100" :
-                "bg-gray-100"
-        )}>
-          <CardTitle className="text-lg font-semibold">{label} ({percentage}%)</CardTitle>
+        <CardHeader
+          className={cn(
+            "flex flex-row  dark:bg-blue-900 justify-between",
+            label === "NEEDS"
+              ? "bg-blue-100"
+              : label === "WANTS"
+                ? "bg-red-100"
+                : label === "SAVING"
+                  ? "bg-green-100"
+                  : "bg-gray-100",
+          )}
+        >
+          <CardTitle className="text-lg font-semibold">
+            {label} ({percentage}%)
+          </CardTitle>
           <div>
             {size == "MAX" ? (
               <div
@@ -76,7 +85,10 @@ function ResizeableContainer({ info }: { info: group }) {
           <div className="text-xl sm:text-2xl font-bold">
             {user.currency} {numFormatter(info.amount)}
           </div>
-          <p className="mt-2 text-xs sm:text-sm text-gray-600 break-words ">{user.currency} {info.amount}  of {user.currency} {expectedAmount} left ( {currentPercentage}% ) </p>
+          <p className="mt-2 text-xs sm:text-sm text-gray-600 break-words ">
+            {user.currency} {info.amount} of {user.currency} {expectedAmount}{" "}
+            left ( {currentPercentage}% ){" "}
+          </p>
         </CardContent>
       </Card>
       {/*
@@ -92,9 +104,6 @@ function ResizeableContainer({ info }: { info: group }) {
         </div>
       </div>
       */}
-
-
-
     </div>
   );
 }
